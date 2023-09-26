@@ -7,6 +7,7 @@
 #include <iostream>
 #include <format>
 #include <string>
+#include <Windows.h>
 
 template<class Param, class Result>
 bool TestSolution( std::function<Result( Param& )> solution, Param test, Result valid )
@@ -19,16 +20,21 @@ inline std::vector<T> ReadTestFile( std::filesystem::path path )
 {
 	std::ifstream is( path );
 
-	//int c;
-	//while ( is >> c )
-	//	std::cout << c << " ";
-	//is.seekg( 0, std::ios::beg );
+	if ( not is ) {
+		std::cerr << "Read Failed: " << path << std::endl;
+		exit( -1 );
+	}
 
 	std::vector<T> elms{};
-	T elm{};
 
-	while ( is >> elm )
-		elms.emplace_back( elm );
+	while ( true ) {
+		T elm{};
+
+		if ( !( is >> elm ) )
+			break;
+
+		elms.emplace_back( std::move(elm) );
+	}
 
 	return elms;
 }
@@ -50,4 +56,25 @@ void OutputTestSolution( std::function<Result( Param& )> solution, Param test, R
 		test, solution( test ), valid,
 		TestSolution<Param, Result>( solution, test, valid )
 	);
+}
+
+template<class Param, class Result, class TestSet>
+void OutputTestSolution( std::function<Result( Param& )> solution, int num, Param test, Result valid )
+{
+	TestSet test_set{ test, solution( test ) };
+	test_set.num = num;
+
+	bool result = TestSolution<Param, Result>( solution, test, valid );
+
+	std::cout << std::format( "{}\n", test_set );
+	std::cout << std::format( "{:=^80}\n", "");
+	std::cout << std::format( " Valid Result: {} | ", valid, result );
+	
+	if ( result )
+		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), 0x2);
+	else
+		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), 0x4);
+	
+	std::cout << std::format( "{}\n", result );
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), 0xf);
 }

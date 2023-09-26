@@ -14,12 +14,21 @@ def TestSolution(solution, test, valid):
 
 
 def OutputResult(num, test, expect, valid, result):
-    numstr = "[" + num + "]"
+    numstr = "[" + str(num) + "]"
     print(f"{numstr:>4} | {test:20} | {expect:15} | {valid:15} | {result}")
 
 
 def OutputTestSolution(solution, num, test, valid):
     OutputResult(num, test, solution(test), valid, TestSolution(solution, test, valid))
+
+
+def OutputTestSolutionExt(solution, num, test, valid, TestSetClass):
+    result = solution(test)
+    test_set = TestSetClass(num, test, result)
+
+    print(format(test_set))
+    print("=" * 50)
+    print(f" Valid Result: {valid} | {result == valid}")
 
 
 if __name__ == "__main__":

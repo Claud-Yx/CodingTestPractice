@@ -8,6 +8,7 @@ def Solution(money):
 
     return coin_cnt
 
+
 if __name__ == "__main__":
     import CodingTester
 
@@ -17,7 +18,10 @@ if __name__ == "__main__":
             self.result = result
 
     file = CodingTester.ReadTestFile("../../../TestSets/3-1.txt")
-    TestSets = [TestSet(money, result) for money, result in ]
+    test_sets = list()
+    for i in range(0, len(file), 2):
+        test_sets.append(TestSet(file[i], file[i+1]))
 
-    print(file)
-    # CodingTester.OutputTestSolution(Solution, )
+    for i, test_set in enumerate(test_sets):
+        CodingTester.OutputTestSolution(Solution, i + 1, test_set.money, test_set.result)
+

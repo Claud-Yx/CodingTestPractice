@@ -13,6 +13,15 @@
     <ClCompile Include="CodingTester.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="[3-2] 큰 수의 법칙.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="[3-3] 숫자 카드 게임.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="[3-4] 1이 될 때까지.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
