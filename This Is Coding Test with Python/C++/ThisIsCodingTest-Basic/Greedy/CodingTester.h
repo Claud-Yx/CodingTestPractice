@@ -68,7 +68,7 @@ void OutputTestSolution( std::function<Result( Param& )> solution, int num, Para
 
 	std::cout << std::format( "{}\n", test_set );
 	std::cout << std::format( "{:=^80}\n", "");
-	std::cout << std::format( " Valid Result: {} | ", valid, result );
+	std::cout << std::format( " Valid Result: {} | ", valid );
 	
 	if ( result )
 		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), 0x2);

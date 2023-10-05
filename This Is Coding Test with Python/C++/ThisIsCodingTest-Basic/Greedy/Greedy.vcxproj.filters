@@ -5,22 +5,40 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Greedy">
+      <UniqueIdentifier>{0bd727aa-9309-43f3-8c4e-da6b592d34d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Implementation">
+      <UniqueIdentifier>{98cb7243-47c0-440b-89b4-773cbef0abc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\NewFilter1">
+      <UniqueIdentifier>{e1bb5aa0-f468-49d7-9909-5f8f40a8d35c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="[3-1] 거스름돈.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CodingTester.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="[3-4] 1이 될 때까지.cpp">
+      <Filter>소스 파일\Greedy</Filter>
+    </ClCompile>
+    <ClCompile Include="[3-1] 거스름돈.cpp">
+      <Filter>소스 파일\Greedy</Filter>
+    </ClCompile>
     <ClCompile Include="[3-2] 큰 수의 법칙.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Greedy</Filter>
     </ClCompile>
     <ClCompile Include="[3-3] 숫자 카드 게임.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Greedy</Filter>
     </ClCompile>
-    <ClCompile Include="[3-4] 1이 될 때까지.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="[4-1] 상하좌우.cpp">
+      <Filter>소스 파일\Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[4-2] 시각.cpp">
+      <Filter>소스 파일\Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[4-3] 왕실의 나이트.cpp">
+      <Filter>소스 파일\Implementation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,12 @@
+5
+R R R U D D
+3 4
+1
+R U D D D R L L L R
+1 1
+3
+D D R R U U L L
+1 1
+5
+R D R D L L L L D D D R
+5 2
