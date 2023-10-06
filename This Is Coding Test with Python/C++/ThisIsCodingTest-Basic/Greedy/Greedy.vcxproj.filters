@@ -58,6 +58,9 @@
     <ClCompile Include="[7-2] 떡볶이 떡 만들기.cpp">
       <Filter>소스 파일\7. BinarySearch</Filter>
     </ClCompile>
+    <ClCompile Include="[6-2] 성적이 낮은 순서로 학생 출력하기.cpp">
+      <Filter>소스 파일\6. Sort</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
