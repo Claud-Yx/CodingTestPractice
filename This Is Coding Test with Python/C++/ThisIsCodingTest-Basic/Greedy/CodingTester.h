@@ -66,6 +66,7 @@ void OutputTestSolution( std::function<Result( Param& )> solution, int num, Para
 
 	bool result = TestSolution<Param, Result>( solution, test, valid );
 
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), 0xf);
 	std::cout << std::format( "{}\n", test_set );
 	std::cout << std::format( "{:=^80}\n", "");
 	std::cout << std::format( " Valid Result: {} | ", valid );

@@ -5,13 +5,16 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Greedy">
+    <Filter Include="소스 파일\3. Greedy">
       <UniqueIdentifier>{0bd727aa-9309-43f3-8c4e-da6b592d34d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Implementation">
+    <Filter Include="소스 파일\4. Implementation">
       <UniqueIdentifier>{98cb7243-47c0-440b-89b4-773cbef0abc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\NewFilter1">
+    <Filter Include="소스 파일\7. BinarySearch">
+      <UniqueIdentifier>{6967f24d-95c1-428e-bd75-d6f18bc4e482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\6. Sort">
       <UniqueIdentifier>{e1bb5aa0-f468-49d7-9909-5f8f40a8d35c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -20,25 +23,40 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="[3-4] 1이 될 때까지.cpp">
-      <Filter>소스 파일\Greedy</Filter>
+      <Filter>소스 파일\3. Greedy</Filter>
     </ClCompile>
     <ClCompile Include="[3-1] 거스름돈.cpp">
-      <Filter>소스 파일\Greedy</Filter>
+      <Filter>소스 파일\3. Greedy</Filter>
     </ClCompile>
     <ClCompile Include="[3-2] 큰 수의 법칙.cpp">
-      <Filter>소스 파일\Greedy</Filter>
+      <Filter>소스 파일\3. Greedy</Filter>
     </ClCompile>
     <ClCompile Include="[3-3] 숫자 카드 게임.cpp">
-      <Filter>소스 파일\Greedy</Filter>
+      <Filter>소스 파일\3. Greedy</Filter>
     </ClCompile>
     <ClCompile Include="[4-1] 상하좌우.cpp">
-      <Filter>소스 파일\Implementation</Filter>
+      <Filter>소스 파일\4. Implementation</Filter>
     </ClCompile>
     <ClCompile Include="[4-2] 시각.cpp">
-      <Filter>소스 파일\Implementation</Filter>
+      <Filter>소스 파일\4. Implementation</Filter>
     </ClCompile>
     <ClCompile Include="[4-3] 왕실의 나이트.cpp">
-      <Filter>소스 파일\Implementation</Filter>
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[4-4] 게임 개발.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[6-1] 위에서 아래로.cpp">
+      <Filter>소스 파일\6. Sort</Filter>
+    </ClCompile>
+    <ClCompile Include="[6-3] 두 배열의 원소 교체.cpp">
+      <Filter>소스 파일\6. Sort</Filter>
+    </ClCompile>
+    <ClCompile Include="[7-1] 부품 찾기.cpp">
+      <Filter>소스 파일\7. BinarySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="[7-2] 떡볶이 떡 만들기.cpp">
+      <Filter>소스 파일\7. BinarySearch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

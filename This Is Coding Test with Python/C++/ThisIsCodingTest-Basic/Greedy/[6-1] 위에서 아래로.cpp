@@ -5,17 +5,24 @@
 using namespace std;
 
 struct Param {
-	char c{};
 	int n{};
+	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.c >> p.n;
+		is >> p.n;
+
+		int elm{};
+		for ( int i{}; i < p.n; ++i ) {
+			is >> elm;
+			p.v.push_back( elm );
+		}
+
 		return is;
 	}
 };
 
-using Result = int;
+using Result = vector<int>;
 
 struct TestSet {
 	int num{};
@@ -31,9 +38,29 @@ struct TestSet {
 	friend istream& operator>>( istream& is, TestSet& t )
 	{
 		is >> t.param;
-		is >> t.result;
+
+		int elm{};
+		for ( int i{}; i < t.param.n; ++i ) {
+			is >> elm;
+			t.result.push_back( elm );
+		}
 
 		return is;
+	}
+};
+
+template <>
+struct std::formatter<Result> {
+	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
+
+	template <typename FormatContext>
+	auto format( const Result& ts, FormatContext& ctx ) {
+
+		auto out = format_to( ctx.out(), "");
+		for ( const auto i : ts )
+			out = format_to( out, "{} ", i );
+
+		return out;
 	}
 };
 
@@ -47,7 +74,13 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "n: {}{}\n", ts.param.c, ts.param.n );
+		out = format_to( out, "n: {}\n", ts.param.n );
+		
+		out = format_to( out, "{:5} | ", "" );
+
+		for ( const auto i : ts.param.v )
+			out = format_to( out, "{} ", i );
+		out = format_to( out, "\n" );
 
 		out = format_to( out, "{:5} | ", "" );
 		out = format_to( out, "Result: {}", ts.result );
@@ -61,7 +94,7 @@ Result BookSolution( Param param );
 
 int main()
 {
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/4-3.txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/6-1.txt" ) };
 
 	cout << "My Solution ==================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
@@ -78,32 +111,11 @@ int main()
 
 Result MySolution( Param param )
 {
-	int x{ param.c - 'a' + 1 };
-	int y{ param.n };
+	Result v{ param.v };
 
-	Result cnt{};
+	sort( v.begin(), v.end(), greater() );
 
-	struct Pos {
-		int x{}, y{};
-	};
-
-	Pos pos[8]{
-		{2, 1}, {2, -1}, {-2, 1}, {-2, -1},
-		{1, 2}, {-1, 2}, {1, -2}, {-1, -2}
-	};
-
-	for ( const auto& p : pos ) {
-		if (
-			x + p.x < 1 or
-			x + p.x > 8 or
-			y + p.y < 1 or
-			y + p.y > 8
-			)
-			continue;
-		++cnt;
-	}
-
-	return cnt;
+	return v;
 }
 
 Result BookSolution( Param param )
