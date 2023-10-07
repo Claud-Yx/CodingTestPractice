@@ -17,6 +17,9 @@
     <Filter Include="소스 파일\6. Sort">
       <UniqueIdentifier>{e1bb5aa0-f468-49d7-9909-5f8f40a8d35c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\5.DFS/BFS">
+      <UniqueIdentifier>{8d37fcfd-9f82-4f12-af2b-49279de1abd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodingTester.cpp">
@@ -60,6 +63,9 @@
     </ClCompile>
     <ClCompile Include="[6-2] 성적이 낮은 순서로 학생 출력하기.cpp">
       <Filter>소스 파일\6. Sort</Filter>
+    </ClCompile>
+    <ClCompile Include="[5-1] 음료수 얼려먹기.cpp">
+      <Filter>소스 파일\5.DFS/BFS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
