@@ -1,0 +1,182 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <functional>
+#include <ranges>
+#include "CodingTester.h"
+
+using namespace std;
+
+struct Param {
+	int n{}, m{};
+	vector<vector<int>> v{};
+
+	friend istream& operator>>( istream& is, Param& p )
+	{
+		is >> p.n >> p.m;
+
+		char elm{};
+		for ( int i{}; i < p.n; ++i ) {
+			p.v.push_back( {} );
+			for ( int j{}; j < p.m; ++j ) {
+				is >> elm;
+				p.v[i].push_back( atoi( &elm ) );
+			}
+		}
+
+		return is;
+	}
+};
+
+using Result = int;
+
+struct TestSet {
+	int num{};
+	Param param{};
+	Result result{};
+
+	TestSet() = default;
+	TestSet( Param p, Result r ) {
+		TestSet();
+		param = p;
+		result = r;
+	}
+	friend istream& operator>>( istream& is, TestSet& t )
+	{
+		is >> t.param;
+		is >> t.result;
+
+		return is;
+	}
+};
+
+template <>
+struct std::formatter<TestSet> {
+	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
+
+	template <typename FormatContext>
+	auto format( const TestSet& ts, FormatContext& ctx ) {
+
+		string strnum = "[" + to_string( ts.num ) + "]";
+		auto out = format_to( ctx.out(), " {:4} | ", strnum );
+
+		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.m );
+
+		out = format_to( out, " {:4} | {}\n", "", "Map" );
+		for ( const auto& v : ts.param.v ) {
+			out = format_to( out, " {:4} | ", "" );
+			for ( const auto i : v )
+				out = format_to( out, "{}", i );
+			out = format_to( out, "\n" );
+		}
+
+		out = format_to( out, "{:5} | ", "" );
+		out = format_to( out, "Result: {}", ts.result );
+
+		return out;
+	}
+};
+
+Result MySolution( Param param );
+Result BookSolution( Param param );
+
+int main()
+{
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/5-2.txt" ) };
+
+	cout << "My Solution ==================\n";
+	for ( int i{}; const auto & test_set : test_sets ) {
+		OutputTestSolution<Param, Result, TestSet>( MySolution, ++i, test_set.param, test_set.result );
+		cout << endl;
+	}
+
+	cout << "Book's Solution ==================\n";
+	for ( int i{}; const auto & test_set : test_sets ) {
+		OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
+		cout << endl;
+	}
+}
+
+Result MySolution( Param param )
+{
+	constexpr int MONSTER{ 0 }, ROAD{ 1 };
+
+	enum DIR { N, E, S, W, DIR_CNT };
+	struct POS { int y{}, x{}; };
+	const POS dirs[]{ { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
+
+	vector<vector<int>> min_dist( param.n, vector<int>( param.m, 0 ) );
+
+	function<void( int, int, int, DIR )> dfs = [&]( int y, int x, int prev_dist, DIR from_dir ) {
+		if ( y < 0 or x < 0 or y >= param.n or x >= param.m )
+			return;
+
+		if ( param.v[y][x] == MONSTER )
+			return;
+
+		int& cur_dist = min_dist[y][x];
+		if ( cur_dist == 0 or cur_dist >= prev_dist )
+			cur_dist = prev_dist + 1;
+		else
+			return;
+		
+		// debug
+		//system( "pause>null" );
+		//cout << endl;
+		//for ( int i{}; i < param.n; ++i ) {
+		//	for ( int j{}; j < param.m; ++j )
+		//		cout << format( "{:2}", min_dist[i][j] );
+		//	cout << endl;
+		//}
+
+		for ( int i{}; i < DIR_CNT; ++i ) {
+			int new_y{ y + dirs[i].y };
+			int new_x{ x + dirs[i].x };
+
+			if ( from_dir != DIR(i) )
+				dfs( new_y, new_x, cur_dist, DIR( ( i + 2 ) % DIR_CNT ) );
+		}
+	};
+
+	dfs( 0, 0, 0, DIR_CNT );
+
+	return min_dist.back().back();
+}
+
+Result BookSolution( Param param )
+{
+	constexpr int MONSTER{ 0 }, ROAD{ 1 };
+
+	struct POS { int y{}, x{}; };
+	const POS dirs[]{ { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
+
+	vector<vector<int>> min_dist{ param.v };
+
+	queue<POS> bfs_q{};
+	bfs_q.push( { 0, 0 } );
+
+	while ( not bfs_q.empty() ) {
+		auto pos = bfs_q.front();
+		bfs_q.pop();
+
+		for ( int i{}; i < 4; ++i ) {
+			int new_y{ pos.y + dirs[i].y };
+			int new_x{ pos.x + dirs[i].x };
+
+			if ( new_y < 0 or new_x < 0 or new_y >= param.n or new_x >= param.m )
+				continue;
+
+			if ( param.v[new_y][new_x] == MONSTER )
+				continue;
+
+			int& new_dist = min_dist[new_y][new_x];
+
+			if ( new_dist == ROAD ) {
+				new_dist = min_dist[pos.y][pos.x] + 1;
+				bfs_q.push( { new_y, new_x } );
+			}
+		}
+	}
+
+	return min_dist.back().back();
+}

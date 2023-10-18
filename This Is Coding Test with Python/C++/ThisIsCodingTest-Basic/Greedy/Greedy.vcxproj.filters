@@ -67,6 +67,12 @@
     <ClCompile Include="[5-1] 음료수 얼려먹기.cpp">
       <Filter>소스 파일\5.DFS/BFS</Filter>
     </ClCompile>
+    <ClCompile Include="[5-2] 미로 탈출.cpp">
+      <Filter>소스 파일\5.DFS/BFS</Filter>
+    </ClCompile>
+    <ClCompile Include="[5-3] 감시.cpp">
+      <Filter>소스 파일\5.DFS/BFS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">

@@ -4,7 +4,7 @@ import os
 def ReadTestFile(path):
     with open(path, 'r') as file:
         elms = file.read().split()
-        elms = [int(elm) if elm.isdigit() else elm for elm in elms]
+        # elms = [int(elm) if elm is list else elm for elm in elms]
 
     return elms
 
