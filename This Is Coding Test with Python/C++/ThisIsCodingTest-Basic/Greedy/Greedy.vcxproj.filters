@@ -20,6 +20,9 @@
     <Filter Include="소스 파일\5.DFS/BFS">
       <UniqueIdentifier>{8d37fcfd-9f82-4f12-af2b-49279de1abd7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\8. DynamicProgramming">
+      <UniqueIdentifier>{356f18d8-4695-41d6-8dab-3676b6937180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodingTester.cpp">
@@ -72,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="[5-3] 감시.cpp">
       <Filter>소스 파일\5.DFS/BFS</Filter>
+    </ClCompile>
+    <ClCompile Include="[8-1] 1로 만들기.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
