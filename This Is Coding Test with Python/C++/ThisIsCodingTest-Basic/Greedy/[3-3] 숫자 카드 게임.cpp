@@ -6,17 +6,17 @@ using namespace std;
 
 struct Param {
 	int n{};
-	int m{};
+	int k{};
 	vector<vector<int>> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n >> self.m;
+		is >> self.n >> self.k;
 
 		int elm{};
 		for ( int n{}; n < self.n; ++n ) {
 			self.v.push_back( {} );
-			for ( int m{}; m < self.m; ++m ) {
+			for ( int m{}; m < self.k; ++m ) {
 				is >> elm;
 				self.v[n].emplace_back(elm);
 			}
@@ -56,12 +56,12 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "N:{}, M:{}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "N:{}, M:{}\n", ts.param.n, ts.param.k );
 
 		for ( int n{}; n < ts.param.n; ++n ) {
 		out = format_to( out, "{:5} | ", "" );
 
-			for ( int m{}; m < ts.param.m; ++m ) {
+			for ( int m{}; m < ts.param.k; ++m ) {
 				out = format_to( out, "{} ", ts.param.v[n][m] );
 			}
 			out = format_to( out, "\n" );

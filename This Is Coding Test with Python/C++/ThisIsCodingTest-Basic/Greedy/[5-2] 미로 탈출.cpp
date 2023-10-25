@@ -8,17 +8,17 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	vector<vector<int>> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.k;
 
 		char elm{};
 		for ( int i{}; i < p.n; ++i ) {
 			p.v.push_back( {} );
-			for ( int j{}; j < p.m; ++j ) {
+			for ( int j{}; j < p.k; ++j ) {
 				is >> elm;
 				p.v[i].push_back( atoi( &elm ) );
 			}
@@ -60,7 +60,7 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.k );
 
 		out = format_to( out, " {:4} | {}\n", "", "Map" );
 		for ( const auto& v : ts.param.v ) {
@@ -105,10 +105,10 @@ Result MySolution( Param param )
 	struct POS { int y{}, x{}; };
 	const POS dirs[]{ { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
 
-	vector<vector<int>> min_dist( param.n, vector<int>( param.m, 0 ) );
+	vector<vector<int>> min_dist( param.n, vector<int>( param.k, 0 ) );
 
 	function<void( int, int, int, DIR )> dfs = [&]( int y, int x, int prev_dist, DIR from_dir ) {
-		if ( y < 0 or x < 0 or y >= param.n or x >= param.m )
+		if ( y < 0 or x < 0 or y >= param.n or x >= param.k )
 			return;
 
 		if ( param.v[y][x] == MONSTER )
@@ -163,7 +163,7 @@ Result BookSolution( Param param )
 			int new_y{ pos.y + dirs[i].y };
 			int new_x{ pos.x + dirs[i].x };
 
-			if ( new_y < 0 or new_x < 0 or new_y >= param.n or new_x >= param.m )
+			if ( new_y < 0 or new_x < 0 or new_y >= param.n or new_x >= param.k )
 				continue;
 
 			if ( param.v[new_y][new_x] == MONSTER )

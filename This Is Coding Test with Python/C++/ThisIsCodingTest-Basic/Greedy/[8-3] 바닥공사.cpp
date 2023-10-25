@@ -1,30 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <numeric>
 #include "CodingTester.h"
 
 using namespace std;
 
-struct Param {
-	int n{}, k{};
-	vector<int> v{};
-
-	friend istream& operator>>( istream& is, Param& p )
-	{
-		is >> p.n >> p.k;
-
-		int elm{};
-		for ( int i{}; i < p.n; ++i ) {
-			is >> elm;
-			p.v.push_back( elm );
-		}
-
-		return is;
-	}
-};
-
-using Result = int;
+using Param = unsigned long long int;
+using Result = unsigned long long int;
 
 struct TestSet {
 	int num{};
@@ -54,14 +35,10 @@ struct std::formatter<TestSet> {
 	auto format( const TestSet& ts, FormatContext& ctx ) {
 
 		string strnum = "[" + to_string( ts.num ) + "]";
+
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.k );
-
-		out = format_to( out, " {:4} | ", "" );
-		for ( const auto i : ts.param.v )
-			out = format_to( out, "{} ", i );
-		out = format_to( out, "\n" );
+		out = format_to( out, "X: {}\n", ts.param );
 
 		out = format_to( out, "{:5} | ", "" );
 		out = format_to( out, "Result: {}", ts.result );
@@ -75,7 +52,7 @@ Result BookSolution( Param param );
 
 int main()
 {
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/7-2.txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/8-3.txt" ) };
 
 	cout << "My Solution ==================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
@@ -92,28 +69,21 @@ int main()
 
 Result MySolution( Param param )
 {
-	int start{};
-	int end = *max_element( param.v.begin(), param.v.end() );
-	Result mid{};
+	vector<unsigned long long int> v( param + 1, 0 );
 
-	while ( true ) {
-		mid = (start + end) / 2;
-		int amount = accumulate( param.v.begin(), param.v.end(), 0, [&]( const int& a, const int& b ) {
-			return a + max( b - mid, 0 );
-			} );
+	v[1] = 1;
+	if ( param >= 2 )
+		v[2] = 3;
 
-		if ( amount == param.k )
-			break;
-		else if ( amount > param.k )
-			start = mid + 1;
-		else
-			end = mid - 1;
+	for ( int i{ 3 }; i <= param; ++i ) {
+		v[i] = v[i - 1] + v[i - 2] * 2;
 	}
 
-	return mid;
+	return v[param] % 796796;
 }
 
 Result BookSolution( Param param )
 {
-	return Result{};
+	vector<int> v( param + 1, 0 );
+	return v[param];
 }

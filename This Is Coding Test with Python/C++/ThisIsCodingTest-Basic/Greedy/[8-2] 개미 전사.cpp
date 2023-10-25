@@ -1,14 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int n{}, k{};
-	vector<int> v1{};
-	vector<int> v2{};
+	int n{};
+	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
@@ -17,22 +15,14 @@ struct Param {
 		int elm{};
 		for ( int i{}; i < p.n; ++i ) {
 			is >> elm;
-			p.v1.push_back( elm );
-		}
-
-		is >> p.k;
-
-		elm = {};
-		for ( int i{}; i < p.k; ++i ) {
-			is >> elm;
-			p.v2.push_back( elm );
+			p.v.push_back( elm );
 		}
 
 		return is;
 	}
 };
 
-using Result = vector<string>;
+using Result = int;
 
 struct TestSet {
 	int num{};
@@ -48,29 +38,9 @@ struct TestSet {
 	friend istream& operator>>( istream& is, TestSet& t )
 	{
 		is >> t.param;
-
-		string elm{};
-		for ( int i{}; i < t.param.k; ++i ) {
-			is >> elm;
-			t.result.push_back( elm );
-		}
+		is >> t.result;
 
 		return is;
-	}
-};
-
-template <>
-struct std::formatter<Result> {
-	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
-
-	template <typename FormatContext>
-	auto format( const Result& ts, FormatContext& ctx ) {
-
-		auto out = format_to( ctx.out(), "" );
-		for ( const auto& s : ts )
-			out = format_to( out, "{} ", s );
-
-		return out;
 	}
 };
 
@@ -82,17 +52,10 @@ struct std::formatter<TestSet> {
 	auto format( const TestSet& ts, FormatContext& ctx ) {
 
 		string strnum = "[" + to_string( ts.num ) + "]";
+
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.k );
-
-		out = format_to( out, " {:4} | ", "N" );
-		for ( const auto i : ts.param.v1 )
-			out = format_to( out, "{} ", i );
-		out = format_to( out, "\n" );
-
-		out = format_to( out, " {:4} | ", "M" );
-		for ( const auto i : ts.param.v2 )
+		for ( const auto i : ts.param.v )
 			out = format_to( out, "{} ", i );
 		out = format_to( out, "\n" );
 
@@ -108,7 +71,7 @@ Result BookSolution( Param param );
 
 int main()
 {
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/7-1.txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/8-2.txt" ) };
 
 	cout << "My Solution ==================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
@@ -125,22 +88,19 @@ int main()
 
 Result MySolution( Param param )
 {
-	Result answers{};
+	vector<int> v( param.n, 0 );
 
-	sort( param.v1.begin(), param.v1.end() );
+	v[0] = param.v[0];
+	v[1] = max( param.v[0], param.v[1] );
 
-	for ( auto i : param.v2 )
-		if ( binary_search( param.v1.begin(), param.v1.end(), i ) )
-			answers.push_back( "yes" );
-		else
-			answers.push_back( "no" );
+	for ( int i{ 2 }; i < param.n; ++i ) {
+		v[i] = max( v[i - 1], v[i - 2] + param.v[i] );
+	}
 
-
-
-	return answers;
+	return v[param.n - 1];
 }
 
 Result BookSolution( Param param )
 {
-	return Result{};
+	return 0;
 }

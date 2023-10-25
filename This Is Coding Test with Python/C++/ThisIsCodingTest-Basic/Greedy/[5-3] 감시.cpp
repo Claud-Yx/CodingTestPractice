@@ -7,17 +7,17 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	vector<vector<int>> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.k;
 
 		char elm{};
 		for ( int i{}; i < p.n; ++i ) {
 			p.v.push_back( {} );
-			for ( int j{}; j < p.m; ++j ) {
+			for ( int j{}; j < p.k; ++j ) {
 				is >> elm;
 				p.v[i].push_back( atoi( &elm ) );
 			}
@@ -59,7 +59,7 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.k );
 
 		out = format_to( out, " {:4} | {}\n", "", "Map" );
 		for ( const auto& v : ts.param.v ) {
@@ -207,13 +207,13 @@ Result MySolution( Param param )
 	};
 
 	// 최소값은 map의 크기
-	Result min_bs{ param.n * param.m };
+	Result min_bs{ param.n * param.k };
 
 	// CCTV 리스트
 	CCTV* CCTVs{};
 
 	for ( int y{}; y < param.n; ++y )
-		for ( int x{}; x < param.m; ++x ) {
+		for ( int x{}; x < param.k; ++x ) {
 			int i = param.v[y][x];
 			array<bool, DIR::CNT> tmp_dirs{};
 

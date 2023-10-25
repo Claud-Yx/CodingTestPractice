@@ -6,16 +6,16 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	int y{}, x{}, d{};
 	vector<vector<int>> map;
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.k;
 		is >> p.y >> p.x >> p.d;
 
-		for ( int i{}; i < p.m; ++i ) {
+		for ( int i{}; i < p.k; ++i ) {
 			p.map.push_back( {} );
 			for ( int j{}; j < p.n; ++j ) {
 				int num{};
@@ -61,14 +61,14 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "N x M: {} x {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "N x M: {} x {}\n", ts.param.n, ts.param.k );
 
 		out = format_to( out, "{:5} | ", "" );
 		out = format_to( out, "first position: {}, {} | first direction: {}\n", ts.param.y, ts.param.x, ts.param.d );
 
 		out = format_to( out, "{:5} | [Map]\n", "" );
 
-		for ( int y{}; y < ts.param.m; ++y ) {
+		for ( int y{}; y < ts.param.k; ++y ) {
 			out = format_to( out, "{:5} | ", "" );
 			
 			for ( int x{}; x < ts.param.n; ++x ) {

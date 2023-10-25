@@ -79,6 +79,21 @@
     <ClCompile Include="[8-1] 1로 만들기.cpp">
       <Filter>소스 파일\8. DynamicProgramming</Filter>
     </ClCompile>
+    <ClCompile Include="[8-2] 개미 전사.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
+    <ClCompile Include="[8-3] 바닥공사.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
+    <ClCompile Include="[8-4] 효율적인 화폐 구성.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
+    <ClCompile Include="[8-5] 평범한 배낭 (12865).cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
+    <ClCompile Include="[8-5] 평범한 배낭 제출용.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">

@@ -8,17 +8,17 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	vector<vector<int>> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.k;
 
 		char elm{};
 		for ( int i{}; i < p.n; ++i ) {
 			p.v.push_back( {} );
-			for ( int j{}; j < p.m; ++j ) {
+			for ( int j{}; j < p.k; ++j ) {
 				is >> elm;
 				p.v[i].push_back( atoi( &elm ));
 			}
@@ -60,7 +60,7 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "n: {} | m: {}\n", ts.param.n, ts.param.k );
 
 		out = format_to( out, " {:4} | {}\n", "", "Map");
 		for ( const auto& v : ts.param.v ) {
@@ -103,12 +103,12 @@ Result MySolution( Param param )
 
 	constexpr int HOLE{ 0 }, BLOCK{ 1 };
 
-	vector<vector<uint8_t>> frozen(param.n, vector<uint8_t>(param.m, false));
+	vector<vector<uint8_t>> frozen(param.n, vector<uint8_t>(param.k, false));
 
 	// dfs 함수
 	function<void(int y, int x)> dfs = [&]( int y, int x )
 		{
-			if ( y < 0 or y >= param.n or x < 0 or x >= param.m ) // y, x 가 범위를 벗어난다면
+			if ( y < 0 or y >= param.n or x < 0 or x >= param.k ) // y, x 가 범위를 벗어난다면
 				return;
 
 			if ( param.v[y][x] == BLOCK )	// 해당 위치가 막혔다면
@@ -128,7 +128,7 @@ Result MySolution( Param param )
 		};
 
 	for ( int y : views::iota( 0, param.n ) ) 
-		for ( int x : views::iota(0, param.m) )
+		for ( int x : views::iota(0, param.k) )
 			if ( frozen[y][x] == false and param.v[y][x] == HOLE ) {
 				dfs( y, x );
 				++cnt;
@@ -146,7 +146,7 @@ Result BookSolution( Param param )
 	// dfs 함수
 	function<bool( int y, int x )> dfs = [&]( int y, int x ) -> bool
 		{
-			if ( y < 0 or y >= param.n or x < 0 or x >= param.m ) // y, x 가 범위를 벗어난다면
+			if ( y < 0 or y >= param.n or x < 0 or x >= param.k ) // y, x 가 범위를 벗어난다면
 				return false;
 
 			if ( param.v[y][x] == HOLE ) {	// 해당 위치가 막혔다면
@@ -165,7 +165,7 @@ Result BookSolution( Param param )
 		};
 
 	for ( int y : views::iota( 0, param.n ) )
-		for ( int x : views::iota( 0, param.m ) )
+		for ( int x : views::iota( 0, param.k ) )
 			if ( dfs( y, x ) )
 				++cnt;
 

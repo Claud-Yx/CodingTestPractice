@@ -40,13 +40,13 @@ using namespace std;
 
 struct Param {
 	int n{};
-	int m{};
+	int k{};
 	int k{};
 	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n >> self.m >> self.k;
+		is >> self.n >> self.k >> self.k;
 		self.v.reserve( self.n );
 
 		int elm{};
@@ -89,7 +89,7 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), " {:4} | ", strnum);
 		
-		out = format_to( out, "N:{}, M:{}, K:{}\n", ts.param.n, ts.param.m, ts.param.k );
+		out = format_to( out, "N:{}, M:{}, K:{}\n", ts.param.n, ts.param.k, ts.param.k );
 		
 		out = format_to( out, "{:5} | ", "");
 		out = format_to( out, "Array: " );
@@ -130,8 +130,8 @@ int MySolution( Param param )
 {
     sort( param.v.begin(), param.v.end(), greater<>() );
 
-    int snd_cnt = param.m / ( param.k + 1 );
-	int max_extra_cnt = param.m % ( param.k + 1 );
+    int snd_cnt = param.k / ( param.k + 1 );
+	int max_extra_cnt = param.k % ( param.k + 1 );
     int max_cnt = ( snd_cnt < 1 ? 1 : snd_cnt ) * param.k + max_extra_cnt;
 
     return param.v[0] * max_cnt + param.v[1] * snd_cnt;
@@ -144,12 +144,12 @@ int BookSolution( Param param )
 	int second = param.v[param.n - 2]; // 두 번째로 큰 수
 
 	// 가장 큰 수가 더해지는 횟수 계산
-	int cnt = ( param.m / ( param.k + 1 ) ) * param.k;
-	cnt += param.m % ( param.k + 1 );
+	int cnt = ( param.k / ( param.k + 1 ) ) * param.k;
+	cnt += param.k % ( param.k + 1 );
 
 	int result = 0;
 	result += cnt * first; // 가장 큰 수 더하기
-	result += ( param.m - cnt ) * second; // 두 번째로 큰 수 더하기
+	result += ( param.k - cnt ) * second; // 두 번째로 큰 수 더하기
 
 	return result; // 최종 답안 출력
 }
