@@ -186,10 +186,14 @@ Result BookSolution( Param param )
 
 	for ( int i{ 1 }; i < param.n + 1; ++i ) {
 		for ( int j{ 1 }; j < param.k + 1; ++j ) {
-			if ( j < param.v[j - 1].first )
-				dp[i][j] = dp[i - 1][j];
-			else
-				dp[i][j] = max( dp[i - 1][j], dp[i - 1][j - param.v[i - 1].first] + param.v[i - 1].second );
+			int weight{ param.v[i - 1].first };
+			int value{ param.v[i - 1].second };
+
+			dp[i][j] = dp[i - 1][j];
+			
+			if ( weight <= j )
+				dp[i][j] = max( dp[i][j], value + dp[i - 1][j - weight] );
+
 		}
 	}
 
