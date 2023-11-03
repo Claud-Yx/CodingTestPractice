@@ -23,6 +23,9 @@
     <Filter Include="소스 파일\8. DynamicProgramming">
       <UniqueIdentifier>{356f18d8-4695-41d6-8dab-3676b6937180}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\9. Shortest Path">
+      <UniqueIdentifier>{bbafd397-2a40-4180-999e-7b5bc2b6d8c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodingTester.cpp">
@@ -93,6 +96,9 @@
     </ClCompile>
     <ClCompile Include="[8-5] 평범한 배낭 제출용.cpp">
       <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
+    <ClCompile Include="[9-1] 미래 도시.cpp">
+      <Filter>소스 파일\9. Shortest Path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
