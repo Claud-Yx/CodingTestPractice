@@ -26,6 +26,9 @@
     <Filter Include="소스 파일\9. Shortest Path">
       <UniqueIdentifier>{bbafd397-2a40-4180-999e-7b5bc2b6d8c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\10. Graph">
+      <UniqueIdentifier>{3e6a6ec8-0978-4f4e-88e1-c13d9ad23610}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodingTester.cpp">
@@ -99,6 +102,18 @@
     </ClCompile>
     <ClCompile Include="[9-1] 미래 도시.cpp">
       <Filter>소스 파일\9. Shortest Path</Filter>
+    </ClCompile>
+    <ClCompile Include="[9-2] 전보.cpp">
+      <Filter>소스 파일\9. Shortest Path</Filter>
+    </ClCompile>
+    <ClCompile Include="[10-1] 팀 결성.cpp">
+      <Filter>소스 파일\10. Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="[10-2] 도시 분할 계획.cpp">
+      <Filter>소스 파일\10. Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="[10-3] 커리큘럼.cpp">
+      <Filter>소스 파일\10. Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,27 +7,37 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
-	vector<pair<int, int>> v{};
-	int x{}, k{};
+	int n{}, m{}, c{};
+	vector<int> indices{};
+	vector<vector<pair<int, int>>> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.m >> p.c;
 
-		int elm1{}, elm2{};
+		p.v.reserve( p.m );
+
+		int elm1{}, elm2{}, elm3{};
+		p.indices.emplace_back( elm1 );
+
 		for ( int i{}; i < p.m; ++i ) {
-			is >> elm1 >> elm2;
-			p.v.emplace_back( elm1, elm2 );
+			is >> elm2 >> elm3;
+			p.v[elm1].emplace_back( pair<int, int>{ elm1, elm2 } );
 		}
-
-		is >> p.x >> p.k;
 
 		return is;
 	}
 };
 
-using Result = int;
+struct Result {
+	int x{}, y{};
+
+	friend istream& operator>>( istream& is, Result& p )
+	{
+		is >> p.x >> p.y;
+		return is;
+	}
+};
 
 struct TestSet {
 	int num{};
@@ -60,15 +70,16 @@ struct std::formatter<TestSet> {
 
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "N: {} K: {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "N: {} M: {} C: {}\n", ts.param.n, ts.param.m, ts.param.c );
 
-		for ( const auto i : ts.param.v ) {
+		for ( int n{};  const auto i : ts.param.v ) {
 			out = format_to( out, "{:5} | ", "" );
-			out = format_to( out, "W: {} V: {}\n", i.first, i.second );
+			out = format_to( out, "X: {} Y: {} Z: {}\n", ts.param.indices[n], i.first, i.second );
+			++n;
 		}
 
 		out = format_to( out, "{:5} | ", "" );
-		out = format_to( out, "Result: {}", ts.result );
+		out = format_to( out, "Result: {}, {}", ts.result.x, ts.result.y );
 
 		return out;
 	}
@@ -79,7 +90,7 @@ Result BookSolution( Param param );
 
 int main()
 {
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/9-1.txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/9-2.txt" ) };
 
 	cout << "My Solution ==================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
@@ -96,29 +107,9 @@ int main()
 
 Result MySolution( Param param )
 {
-	const int INF{ int(1e9) };
 
-	vector<vector<int>> v( param.n + 1, vector<int>( param.n + 1, INF ) );
-
-	for ( int i{ 1 }; i <= param.n; ++i )
-		v[i][i] = 0;
-
-	for ( int i{}; i < param.m; ++i ) {
-		v[param.v[i].first][param.v[i].second] = 1;
-		v[param.v[i].second][param.v[i].first] = 1;
-	}
-
-	for ( int i{ 1 }; i <= param.n; ++i )
-		for ( int j{ 1 }; j <= param.n; ++j )
-			for ( int k{ 1 }; k <= param.n; ++k )
-				v[i][j] = min( v[i][j], v[i][k] + v[k][j] );
-
-	Result result = v[1][param.k] + v[param.k][param.x];
-
-	return result >= INF ? -1 : result;
 }
 
 Result BookSolution( Param param )
 {
-	return 0;
 }
