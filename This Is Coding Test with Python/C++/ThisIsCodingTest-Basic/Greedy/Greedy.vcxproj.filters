@@ -115,6 +115,15 @@
     <ClCompile Include="[10-3] 커리큘럼.cpp">
       <Filter>소스 파일\10. Graph</Filter>
     </ClCompile>
+    <ClCompile Include="[11-1] 모험가 길드.cpp">
+      <Filter>소스 파일\3. Greedy</Filter>
+    </ClCompile>
+    <ClCompile Include="[11-2] 곱하기 혹은 더하기.cpp">
+      <Filter>소스 파일\3. Greedy</Filter>
+    </ClCompile>
+    <ClCompile Include="[11-3] 문자열 뒤집기.cpp">
+      <Filter>소스 파일\3. Greedy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
