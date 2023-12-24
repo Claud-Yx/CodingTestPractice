@@ -1,12 +1,26 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
 
-using Param = string;
+struct Param {
+	int n{};
+	vector<int> v{};
+
+	friend istream& operator>>( istream& is, Param& p )
+	{
+		is >> p.n;
+		int elm{};
+		for ( int i{}; i < p.n; ++i ) {
+			is >> elm;
+			p.v.emplace_back( elm );
+		}
+
+		return is;
+	}
+};
 using Result = int;
 
 struct TestSet {
@@ -39,7 +53,12 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
-		out = format_to( out, "{} ", ts.param );
+		out = format_to( out, "N: {} ", ts.param.n );
+
+		out = format_to( out, "\n" );
+		out = format_to( out, "{:5} | ", "" );
+		for ( int i : ts.param.v )
+			out = format_to( out, "{} ", i );
 
 		out = format_to( out, "\n" );
 		out = format_to( out, "{:5} | ", "" );
@@ -54,7 +73,7 @@ Result BookSolution( Param param );
 
 int main()
 {
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/11-3.txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/11-4.txt" ) };
 
 	cout << "My Solution : Greedy ==================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
@@ -75,25 +94,50 @@ Result MySolution( Param param )
 {
 	Result result{};
 
-	int num_0{}, num_1{};
+	sort( param.v.begin(), param.v.end() );
 
-	char cur{};
-	for ( auto c : param ) {
-		if ( cur != c ) {
-			cur = c;
+	int max{};
+	for ( int i : param.v )
+		max += i;
 
-			switch ( c ) {
-			case '0':
-				++num_0;
+	for ( int num{ 1 }; ; ++num ) {
+		int acc{};
+
+		if ( num == max ) {
+			result = num + 1;
+			break;
+		}
+
+
+		for ( int i{}; i < param.n; ++i ) {
+			acc += param.v[i];
+
+			if ( acc == num )
 				break;
-			case '1':
-				++num_1;
-				break;
+			else if ( acc > num ) {
+				for ( int j{}; j < i; ++j ) {
+					acc -= param.v[j];
+
+					if ( acc == num ) {
+						i = param.n;
+						break;
+					}
+					else if ( acc < num ) {
+						result = num;
+						break;
+					}
+				}
+
+				if ( acc > num ) {
+					result = num;
+					break;
+				}
 			}
 		}
-	}
 
-	result = num_0 < num_1 ? num_0 : num_1;
+		if ( result != 0 )
+			break;
+	}
 
 	return result;
 }

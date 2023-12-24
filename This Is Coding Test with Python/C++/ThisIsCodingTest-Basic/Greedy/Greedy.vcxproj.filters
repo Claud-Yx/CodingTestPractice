@@ -124,6 +124,9 @@
     <ClCompile Include="[11-3] 문자열 뒤집기.cpp">
       <Filter>소스 파일\3. Greedy</Filter>
     </ClCompile>
+    <ClCompile Include="[11-4] 만들 수 없는 금액.cpp">
+      <Filter>소스 파일\3. Greedy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
