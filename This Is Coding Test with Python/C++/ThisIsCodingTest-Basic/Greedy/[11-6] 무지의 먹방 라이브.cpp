@@ -129,21 +129,51 @@ Result MySolution( Param param )
 	list<Elm> l{ v.begin(), v.end() };
 	int k{ param.k };
 
-	for ( auto& p : l ) {
+	// 섭취 시간이 빠른 음식부터 꺼내오기
+	auto p{ l.begin() };
 
-		// 음식을 다 먹기 전에 네트워크 장애가 발생했을 때
-		if ( 0 > k - p.second * l.size() ) {
-			int idx{ k % p.second * l.size() };
+	while ( p != l.end() or l.empty() ) {
+		int eat_time{ p->second };
+		size_t eat_all_time{ eat_time * l.size() };
+
+		// 현재 음식을 다 먹기 전에 네트워크 장애가 발생했을 때
+		if ( 0 > k - eat_all_time ) {
+			size_t idx{ k % eat_all_time };
 			l.sort( LessKey() );	// 남은 음식의 번호를 오름차순으로 정렬
 
 			auto iter{ l.begin() };
-			for ( int i{}; i < idx; ++i ) {
+			for ( int j{}; j < idx; ++j ) {
 				++iter;
 			}
 
 			result = ( *iter ).first;
+			break;
 		}
+
+		// 넷장애 시간 초세기
+		k -= eat_all_time;
+
+		// 모든 음식 섭취 시간 빼기
+		auto iter{ l.begin() };
+		auto cur_l_size{ l.size() };
+		for ( int j{}; j < cur_l_size; ++j ) {
+			iter->second -= eat_time;
+
+			if ( iter->second == 0 ) {	// 다 먹었다면
+				auto tmp{ iter };
+				++tmp;
+				l.erase( iter );
+				iter = tmp;
+			}
+			else
+				++iter;
+		}
+
+		p = next;
 	}
+
+	if ( k >= 0 )
+		result = -1;
 
 	return result;
 }
