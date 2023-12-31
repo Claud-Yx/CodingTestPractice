@@ -81,12 +81,12 @@ int main()
 		cout << endl;
 	}
 
-	//cout << endl;
-	//cout << "Book's Solution ==================\n";
-	//for ( int i{}; const auto & test_set : test_sets ) {
-	//	OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
-	//	cout << endl;
-	//}
+	cout << endl;
+	cout << "Book's Solution ==================\n";
+	for ( int i{}; const auto & test_set : test_sets ) {
+		OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
+		cout << endl;
+	}
 }
 
 // Greedy
@@ -94,45 +94,29 @@ Result MySolution( Param param )
 {
 	Result result{};
 
-	sort( param.v.begin(), param.v.end() );
+	sort( param.v.begin(), param.v.end(), greater<>() );
 
-	int max{};
-	for ( int i : param.v )
-		max += i;
+	for ( int i{ 1 }; ; ++i ) {
+		int num{ i };
 
-	for ( int num{ 1 }; ; ++num ) {
-		int acc{};
+		for ( int elm : param.v ) {
+			num -= elm;
 
-		if ( num == max ) {
-			result = num + 1;
-			break;
-		}
-
-
-		for ( int i{}; i < param.n; ++i ) {
-			acc += param.v[i];
-
-			if ( acc == num )
+			if ( num == 0 )
 				break;
-			else if ( acc > num ) {
-				for ( int j{}; j < i; ++j ) {
-					acc -= param.v[j];
-
-					if ( acc == num ) {
-						i = param.n;
-						break;
-					}
-					else if ( acc < num ) {
-						result = num;
-						break;
-					}
-				}
-
-				if ( acc > num ) {
-					result = num;
+			else if ( num < 0 ) {
+				if ( elm == param.v.back() ) {
+					result = i;
 					break;
 				}
+				num += elm;
+				continue;
 			}
+		}
+
+		if ( num > 0 ) {
+			result = i;
+			break;
 		}
 
 		if ( result != 0 )
@@ -144,6 +128,15 @@ Result MySolution( Param param )
 
 Result BookSolution( Param param )
 {
-	Result result{};
+	Result result{ 1 };
+
+	sort( param.v.begin(), param.v.end() );
+
+	for ( int i : param.v ) {
+		if ( result < i )
+			break;
+		result += i;
+	}
+
 	return result;
 }

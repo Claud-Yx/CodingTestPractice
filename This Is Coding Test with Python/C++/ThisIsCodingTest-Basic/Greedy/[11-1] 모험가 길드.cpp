@@ -115,7 +115,7 @@ Result MySolution( Param param )
 			--max_num;
 		}
 
-		group_num = group_num < cur_group_num ? cur_group_num : group_num;
+		group_num = max( group_num, cur_group_num );
 	}
 
 	result = group_num;

@@ -62,12 +62,12 @@ int main()
 		cout << endl;
 	}
 
-	//cout << endl;
-	//cout << "Book's Solution ==================\n";
-	//for ( int i{}; const auto & test_set : test_sets ) {
-	//	OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
-	//	cout << endl;
-	//}
+	cout << endl;
+	cout << "Book's Solution ==================\n";
+	for ( int i{}; const auto & test_set : test_sets ) {
+		OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
+		cout << endl;
+	}
 }
 
 // Greedy
@@ -93,7 +93,7 @@ Result MySolution( Param param )
 		}
 	}
 
-	result = num_0 < num_1 ? num_0 : num_1;
+	result = min( num_0, num_1 );
 
 	return result;
 }
@@ -101,5 +101,24 @@ Result MySolution( Param param )
 Result BookSolution( Param param )
 {
 	Result result{};
+
+	int count0{}, count1{};
+
+	if ( param[0] == '1' )
+		count0 += 1;
+	else
+		count1 += 1;
+
+	for ( int i{}; i < param.length(); ++i ) {
+		if ( param[i] != param[i + 1] ) {
+			if ( param[i + 1] == '1' )
+				count0 += 1;
+			else
+				count1 += 1;
+		}
+	}
+
+	result = min( count0, count1 );
+
 	return result;
 }
