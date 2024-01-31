@@ -1,43 +1,30 @@
 #include <iostream>
 #include <vector>
-#include <numeric>
 #include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int n{}, k{}, c{};
-	vector<int> indices{};
-	vector<vector<pair<int, int>>> v{};
+	int n{};
+	vector<int> v;
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.k >> p.c;
+		is >> p.n;
+		p.v.reserve( p.n );
 
-		p.v.reserve( p.k );
-
-		int elm1{}, elm2{}, elm3{};
-		p.indices.emplace_back( elm1 );
-
-		for ( int i{}; i < p.k; ++i ) {
-			is >> elm2 >> elm3;
-			p.v[elm1].emplace_back( pair<int, int>{ elm1, elm2 } );
+		int elm{};
+		for ( int i{}; i < p.n; ++i ) {
+			is >> elm;
+			p.v.emplace_back( elm );
 		}
 
 		return is;
 	}
 };
 
-struct Result {
-	int x{}, y{};
-
-	friend istream& operator>>( istream& is, Result& p )
-	{
-		is >> p.x >> p.y;
-		return is;
-	}
-};
+using Result = int;
 
 struct TestSet {
 	int num{};
@@ -70,16 +57,17 @@ struct std::formatter<TestSet> {
 
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "N: {} M: {} C: {}\n", ts.param.n, ts.param.k, ts.param.c );
+		out = format_to( out, "N: {}\n", ts.param.n );
 
-		for ( int n{};  const auto i : ts.param.v ) {
-			out = format_to( out, "{:5} | ", "" );
-			out = format_to( out, "X: {} Y: {} Z: {}\n", ts.param.indices[n], i.first, i.second );
+		out = format_to( out, "{:5} | ", "" );
+		for ( int n{}; const auto i : ts.param.v ) {
+			out = format_to( out, "{} ", i );
 			++n;
 		}
 
+		out = format_to( out, "\n" );
 		out = format_to( out, "{:5} | ", "" );
-		out = format_to( out, "Result: {}, {}", ts.result.x, ts.result.y );
+		out = format_to( out, "Result: {}", ts.result );
 
 		return out;
 	}
@@ -90,26 +78,40 @@ Result BookSolution( Param param );
 
 int main()
 {
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/9-2.txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/B11399.txt" ) };
 
-	cout << "My Solution ==================\n";
+	cout << "My Solution : Greedy ==================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
 		OutputTestSolution<Param, Result, TestSet>( MySolution, ++i, test_set.param, test_set.result );
 		cout << endl;
 	}
 
-	//cout << "Book's Solution ==================\n";
-	//for ( int i{}; const auto & test_set : test_sets ) {
-	//	OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
-	//	cout << endl;
-	//}
+	cout << endl;
+	cout << "Book's Solution ==================\n";
+	for ( int i{}; const auto & test_set : test_sets ) {
+		OutputTestSolution<Param, Result, TestSet>( BookSolution, ++i, test_set.param, test_set.result );
+		cout << endl;
+	}
 }
 
+// Greedy
 Result MySolution( Param param )
 {
+	Result result{};
 
+	sort( param.v.begin(), param.v.end() );
+
+	result = param.v[0];
+	for ( int i{1}; i < param.n; ++i ) {
+		param.v[i] += param.v[i - 1];
+		result += param.v[i];
+	}
+
+	return result;
 }
 
 Result BookSolution( Param param )
 {
+	Result result{};
+	return result;
 }

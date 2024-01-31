@@ -133,6 +133,27 @@
     <ClCompile Include="[11-6] 무지의 먹방 라이브.cpp">
       <Filter>소스 파일\3. Greedy</Filter>
     </ClCompile>
+    <ClCompile Include="[12-1] 럭키 스트레이트.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[12-2] 문자열 재정렬.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[12-3] 문자열 압축.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[12-4] 자물쇠와 열쇠.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[B11399] ATM.cpp">
+      <Filter>소스 파일\3. Greedy</Filter>
+    </ClCompile>
+    <ClCompile Include="[12-5] 뱀.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[12-6] 기둥과 보 설치.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">

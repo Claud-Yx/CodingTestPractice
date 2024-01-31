@@ -9,16 +9,16 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	vector<array<int, 3>> v;
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
-		p.v.reserve( p.m );
+		is >> p.n >> p.k;
+		p.v.reserve( p.k );
 
 		int elm1{}, elm2{}, elm3{};
-		for ( int i{}; i < p.m; ++i ) {
+		for ( int i{}; i < p.k; ++i ) {
 			is >> elm1 >> elm2 >> elm3;
 			p.v.push_back( { elm1, elm2, elm3 } );
 		}
@@ -91,7 +91,7 @@ struct std::formatter<TestSet> {
 
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "N: {} M: {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "N: {} M: {}\n", ts.param.n, ts.param.k );
 
 		for ( int n{}; const auto i : ts.param.v ) {
 			out = format_to( out, "{:5} | ", "" );

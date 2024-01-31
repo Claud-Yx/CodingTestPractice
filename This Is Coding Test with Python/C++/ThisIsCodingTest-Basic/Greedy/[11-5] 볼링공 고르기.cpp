@@ -6,12 +6,12 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.k;
 		int elm{};
 
 		for ( int i{}; i < p.n; ++i ) {
@@ -54,7 +54,7 @@ struct std::formatter<TestSet> {
 		string strnum = "[" + to_string( ts.num ) + "]";
 
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
-		out = format_to( out, "N: {} M: {}", ts.param.n, ts.param.m );
+		out = format_to( out, "N: {} M: {}", ts.param.n, ts.param.k );
 
 		out = format_to( out, "\n" );
 		out = format_to( out, "{:5} | ", "" );
@@ -128,6 +128,9 @@ Result MySolution( Param param )
 		}
 		++cons_nums.back();
 	}
+
+	//              1  2  3
+	// cons_nums = [1, 2, 2]
 
 	// ∑(1 <= i < j <= k)n_i * n_j
 	// 위 식을 코드로 풀어쓴다.

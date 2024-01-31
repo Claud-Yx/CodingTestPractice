@@ -7,16 +7,16 @@
 using namespace std;
 
 struct Param {
-	int n{}, m{};
+	int n{}, k{};
 	vector<pair<int, int>> v{};
 	int x{}, k{};
 
 	friend istream& operator>>( istream& is, Param& p )
 	{
-		is >> p.n >> p.m;
+		is >> p.n >> p.k;
 
 		int elm1{}, elm2{};
-		for ( int i{}; i < p.m; ++i ) {
+		for ( int i{}; i < p.k; ++i ) {
 			is >> elm1 >> elm2;
 			p.v.emplace_back( elm1, elm2 );
 		}
@@ -60,7 +60,7 @@ struct std::formatter<TestSet> {
 
 		auto out = format_to( ctx.out(), " {:4} | ", strnum );
 
-		out = format_to( out, "N: {} K: {}\n", ts.param.n, ts.param.m );
+		out = format_to( out, "N: {} K: {}\n", ts.param.n, ts.param.k );
 
 		for ( const auto i : ts.param.v ) {
 			out = format_to( out, "{:5} | ", "" );
@@ -103,7 +103,7 @@ Result MySolution( Param param )
 	for ( int i{ 1 }; i <= param.n; ++i )
 		v[i][i] = 0;
 
-	for ( int i{}; i < param.m; ++i ) {
+	for ( int i{}; i < param.k; ++i ) {
 		v[param.v[i].first][param.v[i].second] = 1;
 		v[param.v[i].second][param.v[i].first] = 1;
 	}
