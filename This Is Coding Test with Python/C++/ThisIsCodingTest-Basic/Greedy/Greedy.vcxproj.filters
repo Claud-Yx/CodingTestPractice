@@ -154,6 +154,12 @@
     <ClCompile Include="[12-6] 기둥과 보 설치.cpp">
       <Filter>소스 파일\4. Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="[12-7] 치킨 배달.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="[12-8] 외벽 점검.cpp">
+      <Filter>소스 파일\4. Implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
