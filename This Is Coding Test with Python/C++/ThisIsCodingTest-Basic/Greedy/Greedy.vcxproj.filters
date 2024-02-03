@@ -160,6 +160,9 @@
     <ClCompile Include="[12-8] 외벽 점검.cpp">
       <Filter>소스 파일\4. Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="[13-1] 특정 거리의 도시 찾기.cpp">
+      <Filter>소스 파일\5.DFS/BFS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
