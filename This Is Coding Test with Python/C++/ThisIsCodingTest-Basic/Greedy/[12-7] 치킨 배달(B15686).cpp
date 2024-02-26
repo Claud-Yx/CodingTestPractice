@@ -1,3 +1,10 @@
+// https://www.acmicpc.net/problem/15686
+
+#include "core.h"
+
+#ifdef P12_7
+#ifdef VSTOOL
+
 #include <iostream>
 #include <vector>
 #include <array>
@@ -83,6 +90,9 @@ Result BookSolution( Param param );
 
 int main()
 {
+	cout << "Practice 12-7 =======================" << endl;
+
+	cout << "My Solution =========================\n";
 	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/12-7.txt" ) };
 
 	for ( int i{}; const auto & test_set : test_sets ) {
@@ -123,6 +133,7 @@ Result MySolution( Param param )
 
 	int n{ param.n }, m{ param.m };
 	vector<vector<int>> map{};
+	// l = [[], []]
 
 	for ( int i{}; i < n; ++i ) {
 		map.push_back( {} );
@@ -143,6 +154,15 @@ Result MySolution( Param param )
 		}
 	}
 
+	/*
+	최대 치킨집 : 1
+	1 2 15 0 0
+	1 2 12 0 0
+	1 2 11 0 0
+	1 2 12 0 0
+	1 2 15 0 0
+	*/
+
 	for ( auto& chicken : Chickens ) {
 		for ( auto& house : Houses ) {
 			chicken.min_dist += chicken.GetDistanceTo( house );
@@ -150,6 +170,11 @@ Result MySolution( Param param )
 	}
 
 	sort( Chickens.begin(), Chickens.end() );
+
+	//for ( int i{}; i < m; ++i )
+	//{
+	//	result += Chickens[i].min_dist;
+	//}
 
 	for ( auto& house : Houses ) {
 		int min_num{ numeric_limits<int>::max() };
@@ -166,3 +191,10 @@ Result BookSolution( Param param )
 {
 	return Result{};
 }
+
+#endif VSTOOL
+
+#ifdef SUBMIT
+#endif SUBMIT
+
+#endif P12_7

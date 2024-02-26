@@ -223,16 +223,41 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="[12-7] 치킨 배달.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="[12-7] 치킨 배달%28B15686%29.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="[12-8] 외벽 점검.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="[12-8] 외벽 점검%28P60062%29.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="[13-1] 특정 거리의 도시 찾기.cpp" />
+    <ClCompile Include="[13-1] 특정 거리의 도시 찾기%28B18352%29.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="[13-2] 연구소%28B14502%29.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="[13-3] 경쟁적 전염(B18405).cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="[13-4] 괄호 변환%28PC30L60058%29.cpp" />
+    <ClCompile Include="[13-5] 연산자 끼워 넣기(B14888).cpp" />
+    <ClCompile Include="[13-6] 감시 피하기(B18428).cpp" />
+    <ClCompile Include="[13-7] 인구 이동.cpp" />
+    <ClCompile Include="[13-8] 블록 이동하기.cpp" />
     <ClCompile Include="[3-1] 거스름돈.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -386,6 +411,61 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h" />
+    <ClInclude Include="core.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\TestSets\10-1.txt" />
+    <Text Include="..\..\..\TestSets\10-2.txt" />
+    <Text Include="..\..\..\TestSets\10-3.txt" />
+    <Text Include="..\..\..\TestSets\11-1.txt" />
+    <Text Include="..\..\..\TestSets\11-2.txt" />
+    <Text Include="..\..\..\TestSets\11-3.txt" />
+    <Text Include="..\..\..\TestSets\11-4.txt" />
+    <Text Include="..\..\..\TestSets\11-5.txt" />
+    <Text Include="..\..\..\TestSets\11-6.txt" />
+    <Text Include="..\..\..\TestSets\12-1.txt" />
+    <Text Include="..\..\..\TestSets\12-2.txt" />
+    <Text Include="..\..\..\TestSets\12-3.txt" />
+    <Text Include="..\..\..\TestSets\12-4.txt" />
+    <Text Include="..\..\..\TestSets\12-5.txt" />
+    <Text Include="..\..\..\TestSets\12-6.txt" />
+    <Text Include="..\..\..\TestSets\12-7.txt" />
+    <Text Include="..\..\..\TestSets\12-8.txt" />
+    <Text Include="..\..\..\TestSets\13-1.txt" />
+    <Text Include="..\..\..\TestSets\13-2.txt" />
+    <Text Include="..\..\..\TestSets\13-3.txt" />
+    <Text Include="..\..\..\TestSets\13-4.txt" />
+    <Text Include="..\..\..\TestSets\13-5.txt" />
+    <Text Include="..\..\..\TestSets\13-6.txt" />
+    <Text Include="..\..\..\TestSets\13-7.txt" />
+    <Text Include="..\..\..\TestSets\13-8.txt" />
+    <Text Include="..\..\..\TestSets\3-1.txt" />
+    <Text Include="..\..\..\TestSets\3-2.txt" />
+    <Text Include="..\..\..\TestSets\3-3.txt" />
+    <Text Include="..\..\..\TestSets\3-4.txt" />
+    <Text Include="..\..\..\TestSets\4-1.txt" />
+    <Text Include="..\..\..\TestSets\4-2.txt" />
+    <Text Include="..\..\..\TestSets\4-3.txt" />
+    <Text Include="..\..\..\TestSets\4-4.txt" />
+    <Text Include="..\..\..\TestSets\5-1.txt" />
+    <Text Include="..\..\..\TestSets\5-2.txt" />
+    <Text Include="..\..\..\TestSets\5-3.txt" />
+    <Text Include="..\..\..\TestSets\6-1.txt" />
+    <Text Include="..\..\..\TestSets\6-2.txt" />
+    <Text Include="..\..\..\TestSets\6-3.txt" />
+    <Text Include="..\..\..\TestSets\7-1.txt" />
+    <Text Include="..\..\..\TestSets\7-2.txt" />
+    <Text Include="..\..\..\TestSets\8-1.txt" />
+    <Text Include="..\..\..\TestSets\8-2.txt" />
+    <Text Include="..\..\..\TestSets\8-3.txt" />
+    <Text Include="..\..\..\TestSets\8-4.txt" />
+    <Text Include="..\..\..\TestSets\8-5.txt" />
+    <Text Include="..\..\..\TestSets\9-1.txt" />
+    <Text Include="..\..\..\TestSets\9-2.txt" />
+    <Text Include="..\..\..\TestSets\B11399.txt" />
+    <Text Include="CodeForm.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

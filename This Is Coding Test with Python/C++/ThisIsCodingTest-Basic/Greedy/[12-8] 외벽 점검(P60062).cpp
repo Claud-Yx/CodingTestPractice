@@ -1,3 +1,10 @@
+// https://school.programmers.co.kr/learn/courses/30/lessons/60062
+
+#include "core.h"
+
+#ifdef P12_8
+#ifdef VSTOOL
+
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -91,6 +98,8 @@ Result BookSolution( Param param );
 
 int main()
 {
+	cout << "Practice 12-8 =======================" << endl;
+
 	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/12-8.txt" ) };
 
 	cout << "My Solution =========================\n";
@@ -110,7 +119,7 @@ int main()
 풀이
 친구들은 항상 약한 지점부터 시작하여 돌아야 최대 효율을 낼 것이다.
 그러므로 약한 지점부터 점검을 시작하며, 모든 약한 지점을 기준으로
-시계/반시계 방향으로 점검하며 투입 수가 가장 적은 경우를 찾는다.
+시계 방향으로 점검하며 투입 수가 가장 적은 경우를 찾는다.
 
 (예시 1번을 기준)
 1. data table을 만들어 각 취약 지점들의 거리를 구한다. 이 때, 시계(cw) 방향만 구하면 반시계(ccw)도 구할 수 있다.
@@ -376,3 +385,11 @@ Result BookSolution( Param param )
 
 	return answer;
 }
+
+
+#endif VSTOOL
+
+#ifdef SUBMIT
+#endif SUBMIT
+
+#endif P12_8
