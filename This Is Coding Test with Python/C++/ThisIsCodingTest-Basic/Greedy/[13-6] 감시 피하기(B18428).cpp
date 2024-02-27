@@ -9,13 +9,27 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <array>
+#include <algorithm>
+#include <ranges>
 #include "CodingTester.h"
 
 using namespace std;
 
+enum class ElementType {
+	None,
+	Blank = 'X',
+	Teacher = 'T',
+	Student = 'S',
+	Obstacle = 'O'
+};
+
+using Map = vector<vector<ElementType>>;
+
 struct Param {
 	int n{};
-	vector<vector<char>> map{};
+	Map map{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
@@ -28,7 +42,7 @@ struct Param {
 			for ( int j{}; j < self.n; ++j )
 			{
 				is >> c;
-				self.map.back().push_back( c );
+				self.map.back().push_back( static_cast<ElementType>( c ) );
 			}
 		}
 
@@ -80,7 +94,7 @@ struct std::formatter<TestSet> {
 
 			for ( const auto& c : rows )
 			{
-				out = format_to( out, "{} ", c );
+				out = format_to( out, "{} ", static_cast<char>( c ) );
 			}
 		}
 
@@ -119,13 +133,133 @@ int main()
 
 /*
  풀이
+ 각 요소들을 관리하기 용이하도록 클래스로 설계해본다.
 */
 
+struct Pos { 
+	int x{}, y{}; 
+	Pos() = default;
+	Pos( int x, int y ) : x{ x }, y{ y } {}
+
+	Pos&& operator+( Pos other )
+	{
+		Pos tmp{ x + other.x, y + other.y };
+		return move( tmp );
+	}
+
+	bool IsOut( size_t map_size )
+	{
+		return 0 > x or map_size <= x or 0 > y or map_size <= y;
+	}
+};
+
+const array<Pos, 4> kDirVec{ Pos{0, -1}, {1, 0}, {0, 1}, {-1, 0} };
+
+class Teacher {
+public:
+	Teacher() = default;
+	Teacher( Pos pos ) : pos{ pos } {}
+
+	Pos pos{};
+
+	bool WatchStudent( const Map& map )
+	{
+		for ( const Pos& dir : kDirVec )
+		{
+			ElementType elm{};
+			Pos next_pos{ pos };
+			while ( elm != ElementType::Obstacle )
+			{
+				next_pos = next_pos + dir;
+
+				// 범위 유효성 검사
+				if ( next_pos.IsOut( map.size() ) )
+					break;
+
+				elm = map[next_pos.y][next_pos.x];
+
+				// 학생을 찾으면 true를 리턴
+				if ( elm == ElementType::Student )
+					return true;
+			}
+		}
+
+		// 반복문을 모두 통과하면 학생 발견 실패
+		return false;
+	}
+};
 
 Result MySolution( Param param )
 {
 	Result result{};
-	return result;
+	int n = param.n;
+	auto map = param.map;
+	
+	const int kMapSize = n * n;
+	vector<shared_ptr<Teacher>> teachers{};
+
+	for ( int i{}; i < kMapSize; ++i )
+	{
+		Pos pos{ i % n, i / n };
+
+		if ( map[pos.y][pos.x] == ElementType::Teacher )
+			teachers.emplace_back( make_shared<Teacher>( pos ) );
+	}
+
+	for ( int n1{}; n1 < kMapSize ; ++n1 )
+	{
+		// 첫 번째 장애물 설치, 이후 동일
+		Pos pos1{ n1 % n, n1 / n };
+		auto& map_pos1{ map[pos1.y][pos1.x] };
+
+		if ( map_pos1 != ElementType::Blank )
+			continue;
+		map_pos1 = ElementType::Obstacle;
+
+		for ( int n2{ n1 + 1 }; n2 < kMapSize; ++n2 )
+		{
+			Pos pos2{ n2 % n, n2 / n };
+			auto& map_pos2{ map[pos2.y][pos2.x] };
+
+			if ( map_pos2 != ElementType::Blank )
+				continue;
+			map_pos2 = ElementType::Obstacle;
+
+			for ( int n3{ n2 + 1 }; n3 < kMapSize; ++n3 )
+			{
+				Pos pos3{ n3 % n, n3 / n };
+				auto& map_pos3{ map[pos3.y][pos3.x] };
+
+				if ( map_pos3 != ElementType::Blank )
+					continue;
+				map_pos3 = ElementType::Obstacle;
+
+				// 장애물 설치가 끝난 후, 선생님들의 감시가 시작된다.
+				bool detected{};
+				for ( auto& teacher : teachers )
+				{
+					detected = teacher->WatchStudent( map );
+					// 한 명이라도 발견되었다면 스킵 (장애물 위치를 옮김)
+					if ( detected )
+						break;
+				}
+
+				// 모든 선생님들이 발견하지 못했다면 그대로 YES 리턴
+				if ( not detected )
+				{
+					return "YES";
+				}
+
+				// 장애물을 다시 치워준다.
+				map_pos3 = ElementType::Blank;
+			}
+			map_pos2 = ElementType::Blank;
+		}
+		map_pos1 = ElementType::Blank;
+	}
+
+	// 모든 반복문을 통과했다면? 학생은 벗어날 수 없음
+	return "NO";
 }
 
 Result BookSolution( Param param )
@@ -140,8 +274,76 @@ Result BookSolution( Param param )
 #ifdef SUBMIT
 
 #include <iostream>
+#include <string>
+#include <vector>
+#include <array>
+#include <algorithm>
+#include <ranges>
+#include "CodingTester.h"
 
 using namespace std;
+
+enum class ElementType {
+	None,
+	Blank = 'X',
+	Teacher = 'T',
+	Student = 'S',
+	Obstacle = 'O'
+};
+
+using Map = vector<vector<ElementType>>;
+
+struct Pos {
+	int x{}, y{};
+	Pos() = default;
+	Pos( int x, int y ) : x{ x }, y{ y } {}
+
+	Pos&& operator+( Pos other )
+	{
+		return { x + other.x, y + other.y };
+	}
+
+	bool IsOut( size_t map_size )
+	{
+		return 0 > x or map_size <= x or 0 > y or map_size <= y;
+	}
+};
+
+const array<Pos, 4> kDirVec{ Pos{0, -1}, {1, 0}, {0, 1}, {-1, 0} };
+
+class Teacher {
+public:
+	Teacher() = default;
+	Teacher( Pos pos ) : pos{ pos } {}
+
+	Pos pos{};
+
+	bool WatchStudent( const Map& map )
+	{
+		for ( const Pos& dir : kDirVec )
+		{
+			ElementType elm{};
+			Pos next_pos{ pos };
+			while ( elm != ElementType::Obstacle )
+			{
+				next_pos = next_pos + dir;
+
+				// 범위 유효성 검사
+				if ( next_pos.IsOut( map.size() ) )
+					break;
+
+				elm = map[next_pos.y][next_pos.x];
+
+				// 학생을 찾으면 true를 리턴
+				if ( elm == ElementType::Student )
+					return true;
+			}
+		}
+
+		// 반복문을 모두 통과하면 학생 발견 실패
+		return false;
+	}
+};
 
 int main()
 {
@@ -152,7 +354,89 @@ int main()
 #ifdef SUBMIT_LOOP
 	while ( true ) {
 #endif SUBMIT_LOOP
+		int n{};
+		Map map{};
 
+		cin >> n;
+
+		for ( int i{}; i < n; ++i )
+		{
+			map.push_back( {} );
+
+			for ( int j{}; j < n; ++j )
+			{
+				char c{};
+				cin >> c;
+				map.back().push_back( static_cast<ElementType>( c ) );
+			}
+		}
+
+		const int kMapSize = n * n;
+		vector<shared_ptr<Teacher>> teachers{};
+
+		for ( int i{}; i < kMapSize; ++i )
+		{
+			Pos pos{ i % n, i / n };
+
+			if ( map[pos.y][pos.x] == ElementType::Teacher )
+				teachers.emplace_back( make_shared<Teacher>( pos ) );
+		}
+
+		for ( int n1{}; n1 < kMapSize; ++n1 )
+		{
+			// 첫 번째 장애물 설치, 이후 동일
+			Pos pos1{ n1 % n, n1 / n };
+			auto& map_pos1{ map[pos1.y][pos1.x] };
+
+			if ( map_pos1 != ElementType::Blank )
+				continue;
+			map_pos1 = ElementType::Obstacle;
+
+			for ( int n2{}; n2 < kMapSize; ++n2 )
+			{
+				Pos pos2{ n2 % n, n2 / n };
+				auto& map_pos2{ map[pos2.y][pos2.x] };
+
+				if ( map_pos2 != ElementType::Blank )
+					continue;
+				map_pos2 = ElementType::Obstacle;
+
+				for ( int n3{}; n3 < kMapSize; ++n3 )
+				{
+					Pos pos3{ n3 % n, n3 / n };
+					auto& map_pos3{ map[pos3.y][pos3.x] };
+
+					if ( map_pos3 != ElementType::Blank )
+						continue;
+					map_pos3 = ElementType::Obstacle;
+
+					// 장애물 설치가 끝난 후, 선생님들의 감시가 시작된다.
+					bool detected{};
+					for ( auto& teacher : teachers )
+					{
+						detected = teacher->WatchStudent( map );
+						// 한 명이라도 발견되었다면 스킵 (장애물 위치를 옮김)
+						if ( detected )
+							break;
+					}
+
+					// 모든 선생님들이 발견하지 못했다면 그대로 YES 리턴
+					if ( not detected )
+					{
+						cout << "YES";
+						return 0;
+					}
+
+					// 장애물을 다시 치워준다.
+					map_pos3 = ElementType::Blank;
+				}
+				map_pos2 = ElementType::Blank;
+			}
+			map_pos1 = ElementType::Blank;
+		}
+
+		// 모든 반복문을 통과했다면? 학생은 벗어날 수 없음
+		cout << "NO";
 #ifdef SUBMIT_LOOP
 	}
 #endif SUBMIT_LOOP

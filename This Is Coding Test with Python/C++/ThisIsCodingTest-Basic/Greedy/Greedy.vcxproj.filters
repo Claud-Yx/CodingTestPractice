@@ -178,13 +178,13 @@
     <ClCompile Include="[13-5] 연산자 끼워 넣기(B14888).cpp">
       <Filter>소스 파일\5.DFS/BFS</Filter>
     </ClCompile>
-    <ClCompile Include="[13-7] 인구 이동.cpp">
+    <ClCompile Include="[13-7] 인구 이동%28B16234%29.cpp">
       <Filter>소스 파일\5.DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-6] 감시 피하기(B18428).cpp">
       <Filter>소스 파일\5.DFS/BFS</Filter>
     </ClCompile>
-    <ClCompile Include="[13-8] 블록 이동하기.cpp">
+    <ClCompile Include="[13-8] 블록 이동하기%28PC30L60063%29.cpp">
       <Filter>소스 파일\5.DFS/BFS</Filter>
     </ClCompile>
   </ItemGroup>
