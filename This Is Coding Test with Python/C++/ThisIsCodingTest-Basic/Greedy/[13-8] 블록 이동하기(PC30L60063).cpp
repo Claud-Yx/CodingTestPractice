@@ -148,7 +148,7 @@ int main()
 			   |
 	              1 R R X X     1 1 2 X X
 			 	  2 2 N X N	OVR 2 R R X N
-			  -E> N X N X X -N>	N X N X X
+			  -E> N X N X X -S>	N X N X X
 			 	  X X N N X	    X X N N X
 			 	  N N N N N		N N N N N
 			   |			 |
