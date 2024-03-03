@@ -24,3 +24,30 @@ Haebin
 Junkyu
 Soong
 Taewhan
+
+12
+Junkyu 50 50 50
+Sangkeun 50 50 50
+Sunyoung 50 50 50
+Soong 50 50 50
+Haebin 50 50 50
+Kangsoo 50 50 50
+Donghyuk 50 50 50
+Sei 50 50 50
+Wonseob 50 50 50
+Sanghyun 50 50 50
+nsj 50 50 50
+Taewhan 50 50 50
+12
+Donghyuk 
+Haebin 
+Junkyu 
+Kangsoo 
+Sanghyun 
+Sangkeun 
+Sei 
+Soong 
+Sunyoung 
+Taewhan 
+Wonseob 
+nsj
