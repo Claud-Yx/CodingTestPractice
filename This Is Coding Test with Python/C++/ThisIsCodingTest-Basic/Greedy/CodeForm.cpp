@@ -67,9 +67,9 @@ struct std::formatter<TestSet> {
 		// Example Number Line
 		string strnum = "[" + to_string( ts.num ) + "]";
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
-		out = format_to( out, "n: {}", ts.param.n );
 
 		// Parameter Line
+		out = format_to( out, "n: {}", ts.param.n );
 		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
