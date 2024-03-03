@@ -9,6 +9,8 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
@@ -160,12 +162,50 @@ int main()
 
 /*
  풀이
+ 1. 국어 내림차순
+ 2. 영어 오름차순
+ 3. 수학 내림차순
+ 4. 이름 사전순(오름차순)
 */
 
+struct StudentScore {
+	string name{};
+	int kor{}, eng{}, math{};
+
+	StudentScore() = default;
+	StudentScore( string name, int kor, int eng, int math ) :
+		name{ name }, kor{ kor }, eng{ eng }, math{ math } {}
+};
 
 Result MySolution( Param param )
 {
 	Result result{};
+
+	struct Comp {
+		bool operator()( const StudentScore& lhs, const StudentScore& rhs ) const
+		{
+			if ( lhs.kor != rhs.kor )
+				return lhs.kor > rhs.kor; // 국어 점수가 높은 학생이 앞에 오도록
+			if ( lhs.eng != rhs.eng )
+				return lhs.eng < rhs.eng; // 영어 점수가 낮은 학생이 앞에 오도록
+			if ( lhs.math != rhs.math )
+				return lhs.math > rhs.math; // 수학 점수가 높은 학생이 앞에 오도록
+			return lhs.name < rhs.name; // 이름이 사전 순으로 앞선 학생이 앞에 오도록
+		}
+	};
+
+	vector<StudentScore> students{};
+
+	for ( int i{}; i < param.n; ++i )
+		students.emplace_back( param.name[i], param.kor[i], param.eng[i], param.math[i] );
+
+	sort( students.begin(), students.end(), Comp() );
+
+	result.n = param.n;
+
+	for ( const auto& student : students )
+		result.v.push_back( student.name );
+
 	return result;
 }
 
