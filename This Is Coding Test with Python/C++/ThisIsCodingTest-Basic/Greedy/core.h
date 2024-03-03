@@ -7,3 +7,4 @@
 // SUBMIT: build for submit to coding test build tool
 // SUBMIT_LOOP: build for submit but discovered by loop
 #define VSTOOL
+#define DEBUG 0

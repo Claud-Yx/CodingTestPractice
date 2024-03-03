@@ -13,6 +13,10 @@
 #include <queue>
 #include "CodingTester.h"
 
+#if DEBUG
+#include <thread>
+#endif 
+
 using namespace std;
 
 struct Param {
@@ -174,6 +178,325 @@ int main()
 */
 
 enum class DIR { N, E, S, W, NW, NE, SE, SW, LAST };
+#if DEBUG
+const string const strDIR[]{ "N", "E", "S", "W", "NW", "NE", "SE", "SW", "LAST" };	// debug
+#endif
+enum class ROT { X, Y };
+
+struct Pos {
+	int x{}, y{};
+
+	Pos operator+( const Pos& other )
+	{
+		return { x + other.x, y + other.y };
+	}
+
+	void operator+=( const Pos& other )
+	{
+		*this = *this + other;
+	}
+};
+
+const Pos kDirVec[]{ {0, -1}, {1, 0}, {0, 1}, {-1, 0}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1} };
+
+using Map = vector<vector<int>>;
+using RobotPos = array<Pos, 2>;
+using DistTable = vector<vector<unsigned int>>;
+constexpr int ROAD{ 0 }, WALL{ 1 };
+
+class Robot {
+public:
+	RobotPos pos{ Pos{ 0, 0 }, { 1, 0 } };	// default: 로봇의 초기 위치, index는 0: 왼쪽 or 위
+	ROT rotation{ ROT::X };	// 로봇의 긴 부분의 방향(X: 가로 | Y: 세로)
+
+	// 이동이 가능한가? -> 벽이나 맵 외부에 의해 갈 수 없으면 false, 가능하면 이동 후 true
+	bool TryMove( DIR dir, const Map& map )
+	{
+		size_t map_size = map.size();
+
+		RobotPos new_pos{ pos };			// 로봇의 새로운 위치값, 움직이는 것이 가능할 때 pos가 new_pos로 대체된다.
+		size_t int_dir{ size_t( dir ) };	// 방향 enum값을 int화 한 것
+		Pos rotate_blank_pos{};				// 회전 시 비어있어야 할 위치 값(그림 참고)
+
+		// new_pos 정하기
+		switch ( dir ) 
+		{
+		// 북동남서 방향으로의 움직임은 전체를 해당 방향으로 이동시키기만 하면 된다.
+		case DIR::N:
+		case DIR::E:
+		case DIR::S:
+		case DIR::W:
+		{
+			for ( int i{}; i < pos.size(); ++i )
+				new_pos[i] += kDirVec[int_dir];
+			break;
+		}
+
+		// 회전은 각각 처리해주어야 한다.
+		case DIR::NW:
+		{
+			if ( rotation == ROT::X )
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::N )];
+			else
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::W )];
+
+			new_pos[1] += kDirVec[int_dir];
+			swap( new_pos[0], new_pos[1] );
+			break;
+		}
+		case DIR::NE:
+			if ( rotation == ROT::X )
+			{
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::N )];
+				new_pos[0] += kDirVec[int_dir];
+			}
+			else
+			{
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::E )];
+				new_pos[1] += kDirVec[int_dir];
+			}
+			break;
+		case DIR::SE:
+			if ( rotation == ROT::X )
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::S )];
+			else
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::E )];
+
+			new_pos[0] += kDirVec[int_dir];
+			swap( new_pos[0], new_pos[1] );
+			break;
+		case DIR::SW:
+			if ( rotation == ROT::X )
+			{
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::S )];
+				new_pos[1] += kDirVec[int_dir];
+			}
+			else
+			{
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::W )];
+				new_pos[0] += kDirVec[int_dir];
+			}
+			break;
+		}
+
+		// border check
+		for ( const auto& p : new_pos )
+		{
+			// map 밖을 나가지 않는지 확인
+			if ( p.x < 0 or p.y < 0 or p.x >= map_size or p.y >= map_size )
+				return false;
+
+			// 새로운 위치가 벽과 겹치지 않는지 확인
+			if ( WALL == map[p.y][p.x] )
+				return false;
+		}
+
+		// 회전 도중 막히지 않는지 확인
+		if ( WALL == map[rotate_blank_pos.y][rotate_blank_pos.x] )
+			return false;
+
+		// 위 과정을 통과했으면 로봇의 회전 값을 바꿔준다. (예시: ─ -> │ )
+		switch ( dir )
+		{
+		case DIR::NW:
+		case DIR::NE:
+		case DIR::SE:
+		case DIR::SW:
+			rotation = ( rotation == ROT::X ? ROT::Y : ROT::X );
+			break;
+		}
+
+		// 위치를 새로운 위치로 바꿔준다.
+		pos = new_pos;
+		return true;
+	}
+
+#if DEBUG
+	// Debug
+	RobotPos prev_pos{};
+	DIR from_dir{};
+#endif
+};
+
+#if DEBUG
+void DebugDrawMap(const Robot* const robot, const Map& map, const vector<vector<unsigned int>>& dist_table, unsigned int dist)
+{
+	int n = map.size();
+	static int kRobotCount{};
+	system( "cls" );
+	cout << format( "=== Debug Draw ===\n" );
+
+	if ( robot )
+	{
+		string prev_dir{ strDIR[(int)robot->from_dir] };
+		cout << format( "No.{:<2} | Dist: {}\ncur_pos: [{} {}] [{} {}] | prev_pos: [{} {}] [{} {}] | from_dir: {:s}\n",
+			++kRobotCount, dist,
+			robot->pos[0].x, robot->pos[0].y, robot->pos[1].x, robot->pos[1].y,
+			robot->prev_pos[0].x, robot->prev_pos[0].y, robot->prev_pos[1].x, robot->prev_pos[1].y,
+			prev_dir
+		);
+	}
+	else
+	{
+		this_thread::sleep_for( chrono::duration( 1000ms ) );
+	}
+
+	cout << format( "{:>2} |", "" );
+
+	for ( int i{}; i < n; ++i )
+	{
+		cout << format( " {:>3}", i );
+	}
+
+	cout << endl;
+	string line{ "====" };
+	for ( int i{}; i < n; ++i )
+	{
+		line += "====";
+	}
+	cout << format( "{}\n", line );
+
+	for ( int i{}; i < n; ++i )
+	{
+		cout << format( " {:>2}|", i );
+
+		for ( int j{}; j < n; ++j )
+		{
+			int elm{};
+			char format{};
+			if ( map[i][j] == WALL ) {
+				elm = 'X';
+				format = 'c';
+			}
+			else if ( dist_table[i][j] == -1 ) {
+				elm = 'N';
+				format = 'c';
+			}
+			else {
+				elm = dist_table[i][j];
+				format = 'd';
+			}
+
+			if ( robot ) {
+				if ( i == robot->pos[0].y and j == robot->pos[0].x or i == robot->pos[1].y and j == robot->pos[1].x ) {
+					elm = 'R';
+					format = 'c';
+				}
+			}
+
+			if ( format == 'c' )
+				cout << std::format( "{:>4c}", elm );
+			else
+				cout << std::format( "{:>4d}", elm );
+
+		}
+
+
+		cout << endl;
+	}
+
+
+	system( "pause" );
+}
+#endif
+
+Result MySolution( Param param )
+{
+	Result result{};
+
+	int n{ param.n };		// map의 sqrt 크기
+	Map map{ param.map };	// map 입력 받아주기
+
+	array<DistTable, 2> dist_tables{};	// 방향 마다의 위치를 기록할 table 두 개
+	size_t X{ size_t( ROT::X ) }, Y{ size_t( ROT::Y ) };	// 로봇 회전값의 int 형
+	queue<pair<Robot, unsigned int>> bfs_q{};				// 로봇과 거리를 담을 bfs queue
+
+	for ( auto& dist_table : dist_tables )
+	{
+		for ( int y{}; y < n; ++y )
+		{
+			dist_table.push_back( {} );
+			for ( int x{}; x < n; ++x )
+			{
+				dist_table[y].push_back( -1 );	// 모든 최소거리 테이블을 uint 최대값으로 초기화
+			}
+		}
+	}
+
+	bfs_q.push( { Robot{}, 0 } );	// 초기 위치의 로봇을 push
+
+	while ( not bfs_q.empty() )
+	{
+		// queue pop
+		auto robot = bfs_q.front().first;
+		auto dist = bfs_q.front().second;
+		bfs_q.pop();
+
+		// 현 위치로 움직여도 되는지? -> 최단거리 테이블 확인 후 업데이트
+		auto& dist_table = dist_tables[(size_t)robot.rotation];		// 사용될 현재 회전값의 최단거리 테이블
+		auto& pos1{ dist_table[robot.pos[0].y][robot.pos[0].x] };	// 로봇의 [0]번째 위치의 최소거리 (위 or 왼쪽)
+		auto& pos2{ dist_table[robot.pos[1].y][robot.pos[1].x] };	// 로봇의 [1]번째 위치의 최소거리 (아래 or 오른쪽)
+
+		// 양쪽 모두 현 거리보다 낮다면 불가능 or 양쪽이 모두 같으면 불가능 -> 여기서 중복되는 로봇들을 걸러줌
+		if ( pos1 < dist and pos2 < dist or pos1 == dist and pos2 == dist )
+			continue;
+
+		// 최단거리 업데이트
+		pos1 = min( pos1, dist );
+		pos2 = min( pos2, dist );
+
+#if DEBUG
+		DebugDrawMap( &robot, map, dist_table, dist );
+#endif
+
+		// 모든 방향 이동 가능 여부 확인
+		for ( DIR dir{}; dir != DIR::LAST; dir = DIR( int(dir) + 1 ) )
+		{
+			Robot next_robot = robot;
+#if DEBUG
+			next_robot.prev_pos = robot.pos;	// debug
+			next_robot.from_dir = dir;			// debug
+#endif
+			if ( next_robot.TryMove( dir, map ) )
+			{
+				bfs_q.push( { next_robot, dist + 1 } );
+			}
+		}
+	}
+
+#if DEBUG
+	auto dist_table = dist_tables[0];
+
+	for ( int y{}; y < n; ++y )
+		for ( int x{}; x < n; ++x )
+			dist_table[y][x] = min( dist_table[y][x], dist_tables[1][y][x] );
+
+	DebugDrawMap( nullptr, map, dist_table, 0 );
+#endif
+
+	result = min( dist_tables[X][n - 1][n - 1], dist_tables[Y][n - 1][n - 1] );
+	return result;
+}
+
+Result BookSolution( Param param )
+{
+	Result result{};
+	return result;
+}
+#endif VSTOOL
+
+// For submit
+
+#ifdef SUBMIT
+
+#include <iostream>
+#include <array>
+#include <vector>
+#include <queue>
+#include "CodingTester.h"
+
+using namespace std;
+enum class DIR { N, E, S, W, NW, NE, SE, SW, LAST };
 enum class ROT { X, Y };
 
 struct Pos {
@@ -210,8 +533,10 @@ public:
 		RobotPos new_pos{ pos };
 		size_t int_dir{ size_t( dir ) };
 
+
 		// new_pos 정하기
-		switch ( dir ) 
+		Pos rotate_blank_pos{};
+		switch ( dir )
 		{
 		case DIR::N:
 		case DIR::E:
@@ -223,22 +548,46 @@ public:
 			}
 			break;
 		case DIR::NW:
+			if ( rotation == ROT::X )
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::N )];
+			else
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::W )];
+
 			new_pos[1] += kDirVec[int_dir];
+			swap( new_pos[0], new_pos[1] );
 			break;
 		case DIR::NE:
 			if ( rotation == ROT::X )
+			{
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::N )];
 				new_pos[0] += kDirVec[int_dir];
+			}
 			else
+			{
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::E )];
 				new_pos[1] += kDirVec[int_dir];
+			}
 			break;
 		case DIR::SE:
+			if ( rotation == ROT::X )
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::S )];
+			else
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::E )];
+
 			new_pos[0] += kDirVec[int_dir];
+			swap( new_pos[0], new_pos[1] );
 			break;
 		case DIR::SW:
 			if ( rotation == ROT::X )
-				new_pos[0] += kDirVec[int_dir];
-			else
+			{
+				rotate_blank_pos = new_pos[1] + kDirVec[int( DIR::S )];
 				new_pos[1] += kDirVec[int_dir];
+			}
+			else
+			{
+				rotate_blank_pos = new_pos[0] + kDirVec[int( DIR::W )];
+				new_pos[0] += kDirVec[int_dir];
+			}
 			break;
 		}
 
@@ -250,6 +599,9 @@ public:
 			if ( WALL == map[p.y][p.x] )
 				return false;
 		}
+
+		if ( WALL == map[rotate_blank_pos.y][rotate_blank_pos.x] )
+			return false;
 
 		// 방향 전환을 알림
 		switch ( dir )
@@ -267,81 +619,6 @@ public:
 	}
 };
 
-Result MySolution( Param param )
-{
-	Result result{};
-
-	int n{ param.n };
-	Map map{ param.map };
-
-	DistTable dist_tables{};
-	size_t X{ size_t( ROT::X ) }, Y{ size_t( ROT::Y ) };
-	queue<pair<Robot, unsigned int>> bfs_q{};
-
-	for ( auto& dist_table : dist_tables )
-	{
-		for ( int y{}; y < n; ++y )
-		{
-			dist_table.push_back( {} );
-			for ( int x{}; x < n; ++x )
-			{
-				dist_table[y].push_back( -1 );
-			}
-		}
-	}
-
-	bfs_q.push( { Robot{}, 1 } );
-
-	while ( not bfs_q.empty() )
-	{
-		// queue pop
-		auto robot = bfs_q.front().first;
-		auto dist = bfs_q.front().second;
-		bfs_q.pop();
-
-		// 현 위치로 움직여도 되는지? -> 최단거리 테이블 확인 후 업데이트
-		auto& dist_table = dist_tables[(size_t)robot.rotation];
-		auto& pos1{ dist_table[robot.pos[0].y][robot.pos[0].x] };
-		auto& pos2{ dist_table[robot.pos[1].y][robot.pos[1].x] };
-
-		// 양쪽 모두 현 거리보다 낮다면 불가능
-		if ( pos1 < dist and pos2 < dist )
-			continue;
-
-		pos1 = min( pos1, dist );
-		pos2 = min( pos2, dist );
-
-		// 모든 방향 이동 가능 여부 확인
-		for ( DIR dir{}; dir != DIR::LAST; dir = DIR( int(dir) + 1 ) )
-		{
-			Robot next_robot = robot;
-
-			if ( next_robot.TryMove( dir, map ) )
-			{
-				bfs_q.push( { next_robot, dist + 1 } );
-			}
-		}
-	}
-
-	result = min( dist_tables[X][n - 1][n - 1], dist_tables[Y][n - 1][n - 1] );
-	return result;
-}
-
-Result BookSolution( Param param )
-{
-	Result result{};
-	return result;
-}
-#endif VSTOOL
-
-// For submit
-
-#ifdef SUBMIT
-
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 #ifdef DEBUG
@@ -352,7 +629,74 @@ int main()
 	while ( true ) {
 #endif SUBMIT_LOOP
 		// Start coding here
+		int result{};
 
+		int n{};
+		cin >> n;
+
+		int num{};
+		Map map{};
+		for ( int y{}; y < n; ++y )
+		{
+			map.push_back( {} );
+			for ( int x{}; x < n; ++x )
+			{
+				cin >> num;
+				map.back().push_back( num );
+			}
+		}
+
+		DistTable dist_tables{};
+		size_t X{ size_t( ROT::X ) }, Y{ size_t( ROT::Y ) };
+		queue<pair<Robot, unsigned int>> bfs_q{};
+
+		for ( auto& dist_table : dist_tables )
+		{
+			for ( int y{}; y < n; ++y )
+			{
+				dist_table.push_back( {} );
+				for ( int x{}; x < n; ++x )
+				{
+					dist_table[y].push_back( -1 );
+				}
+			}
+		}
+
+		bfs_q.push( { Robot{}, 0 } );
+
+		while ( not bfs_q.empty() )
+		{
+			// queue pop
+			auto robot = bfs_q.front().first;
+			auto dist = bfs_q.front().second;
+			bfs_q.pop();
+
+			// 현 위치로 움직여도 되는지? -> 최단거리 테이블 확인 후 업데이트
+			auto& dist_table = dist_tables[(size_t)robot.rotation];
+			auto& pos1{ dist_table[robot.pos[0].y][robot.pos[0].x] };
+			auto& pos2{ dist_table[robot.pos[1].y][robot.pos[1].x] };
+
+			// 양쪽 모두 현 거리보다 낮다면 불가능
+			if ( pos1 < dist and pos2 < dist or pos1 == dist and pos2 == dist )
+				continue;
+
+			pos1 = min( pos1, dist );
+			pos2 = min( pos2, dist );
+
+			// 모든 방향 이동 가능 여부 확인
+			for ( DIR dir{}; dir != DIR::LAST; dir = DIR( int( dir ) + 1 ) )
+			{
+				Robot next_robot = robot;
+
+				if ( next_robot.TryMove( dir, map ) )
+				{
+					bfs_q.push( { next_robot, dist + 1 } );
+				}
+			}
+		}
+
+		result = min( dist_tables[X][n - 1][n - 1], dist_tables[Y][n - 1][n - 1] );
+		cout << result << endl;
 #ifdef SUBMIT_LOOP
 	}
 #endif SUBMIT_LOOP
