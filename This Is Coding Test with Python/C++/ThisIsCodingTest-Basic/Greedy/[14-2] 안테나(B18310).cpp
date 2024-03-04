@@ -9,18 +9,22 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
+#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
 
+using int64 = __int64;
+
 struct Param {
 	int n{};
-	vector<int> v{};
+	vector<int64> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
 		is >> self.n;
-		int num{};
+		unsigned int num{};
 		for ( int i{}; i < self.n; ++i )
 		{
 			is >> num;
@@ -31,7 +35,8 @@ struct Param {
 	}
 };
 
-using Result = int;
+using Result = int64;
+;
 
 struct TestSet {
 	int num{};
@@ -50,18 +55,6 @@ struct TestSet {
 		is >> t.result;
 
 		return is;
-	}
-};
-
-// Only Result Formmater
-template <>
-struct std::formatter<Result> {
-	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
-
-	template <typename FormatContext>
-	auto format( const Result& ts, FormatContext& ctx ) {
-		auto out = format_to( ctx.out(), "{}", ts );
-		return out;
 	}
 };
 
@@ -121,12 +114,26 @@ int main()
 
 /*
  풀이
+ 각 집에서의 안테나 설치 시뮬레이션을 돌린다.
+ 그 중 안테나 거리 합이 가장 짧으며 집의 위치가 가장 작은 값을 도출해낸다.
+
+ -> 결국 중앙값을 구하는 것이므로, 정렬 후 중앙값을, 짝수라면 더 작은 수를 도출한다.
+
 */
 
+#undef max
+#undef min
 
 Result MySolution( Param param )
 {
 	Result result{};
+
+	int n{ param.n };
+	vector<int64> v{ param.v };
+
+	sort( v.begin(), v.end() );
+	return v[(n-1)/2];
+
 	return result;
 }
 
@@ -142,23 +149,36 @@ Result BookSolution( Param param )
 #ifdef SUBMIT
 
 #include <iostream>
+#include <vector>
+#include <limits>
+#include <algorithm>
 
 using namespace std;
+
+using int64 = __int64;
 
 int main()
 {
 #ifdef DEBUG
 	cout << "Practice " << CP_NUM << " =======================" << endl;
 #endif DEBUG
+	int n{};
+	vector<int64> v{};
 
-#ifdef SUBMIT_LOOP
-	while ( true ) {
-#endif SUBMIT_LOOP
-		// Start coding here
+	cin >> n;
 
-#ifdef SUBMIT_LOOP
+	int64 num{};
+	for ( int i{}; i < n; ++i )
+	{
+		cin >> num;
+		v.push_back( num );
 	}
-#endif SUBMIT_LOOP
+
+	sort( v.begin(), v.end() );
+	size_t index = v.size() / 2;
+	index = ( v.size() & 1UL ) ? index : index - 1;
+
+	cout << v[index];
 
 	return 0;
 }
