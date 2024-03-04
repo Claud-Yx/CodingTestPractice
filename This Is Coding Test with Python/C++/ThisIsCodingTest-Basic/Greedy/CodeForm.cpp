@@ -133,15 +133,8 @@ int main()
 #ifdef DEBUG
 	cout << "Practice " << CP_NUM << " =======================" << endl;
 #endif DEBUG
+	// Start coding here
 
-#ifdef SUBMIT_LOOP
-	while ( true ) {
-#endif SUBMIT_LOOP
-		// Start coding here
-
-#ifdef SUBMIT_LOOP
-	}
-#endif SUBMIT_LOOP
 
 	return 0;
 }
