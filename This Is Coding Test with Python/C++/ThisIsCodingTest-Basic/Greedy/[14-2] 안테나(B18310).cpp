@@ -175,10 +175,7 @@ int main()
 	}
 
 	sort( v.begin(), v.end() );
-	size_t index = v.size() / 2;
-	index = ( v.size() & 1UL ) ? index : index - 1;
-
-	cout << v[index];
+	cout << v[( n - 1 ) / 2];
 
 	return 0;
 }
