@@ -17,9 +17,6 @@
     <Filter Include="소스 파일\6. Sort">
       <UniqueIdentifier>{e1bb5aa0-f468-49d7-9909-5f8f40a8d35c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\5.DFS/BFS">
-      <UniqueIdentifier>{8d37fcfd-9f82-4f12-af2b-49279de1abd7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\8. DynamicProgramming">
       <UniqueIdentifier>{356f18d8-4695-41d6-8dab-3676b6937180}</UniqueIdentifier>
     </Filter>
@@ -31,6 +28,9 @@
     </Filter>
     <Filter Include="소스 파일\1. TestSets">
       <UniqueIdentifier>{e29cc0f7-9d96-4e53-9b84-35ff4d0ebb83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\5. DFS/BFS">
+      <UniqueIdentifier>{8d37fcfd-9f82-4f12-af2b-49279de1abd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,13 +77,13 @@
       <Filter>소스 파일\6. Sort</Filter>
     </ClCompile>
     <ClCompile Include="[5-1] 음료수 얼려먹기.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[5-2] 미로 탈출.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[5-3] 감시.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[8-1] 1로 만들기.cpp">
       <Filter>소스 파일\8. DynamicProgramming</Filter>
@@ -164,28 +164,28 @@
       <Filter>소스 파일\4. Implementation</Filter>
     </ClCompile>
     <ClCompile Include="[13-1] 특정 거리의 도시 찾기%28B18352%29.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-2] 연구소%28B14502%29.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-3] 경쟁적 전염(B18405).cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-4] 괄호 변환%28PC30L60058%29.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-5] 연산자 끼워 넣기(B14888).cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-7] 인구 이동%28B16234%29.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-6] 감시 피하기(B18428).cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[13-8] 블록 이동하기%28PC30L60063%29.cpp">
-      <Filter>소스 파일\5.DFS/BFS</Filter>
+      <Filter>소스 파일\5. DFS/BFS</Filter>
     </ClCompile>
     <ClCompile Include="[14-1] 국영수(B10825).cpp">
       <Filter>소스 파일\6. Sort</Filter>
@@ -198,6 +198,18 @@
     </ClCompile>
     <ClCompile Include="[14-4] 카드 정렬하기(B1715).cpp">
       <Filter>소스 파일\6. Sort</Filter>
+    </ClCompile>
+    <ClCompile Include="[15-1] 정렬된 배열에서 특정 수의 개수 구하기.cpp">
+      <Filter>소스 파일\7. BinarySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="[15-2] 고정점 찾기.cpp">
+      <Filter>소스 파일\7. BinarySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="[15-3] 공유기 설치%28B2110%29.cpp">
+      <Filter>소스 파일\7. BinarySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="[15-4] 가사 검색%28PC30L60060%29.cpp">
+      <Filter>소스 파일\7. BinarySearch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +381,18 @@
       <Filter>소스 파일\1. TestSets</Filter>
     </Text>
     <Text Include="..\..\..\TestSets\14-4.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\15-1.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\15-2.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\15-3.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\15-4.txt">
       <Filter>소스 파일\1. TestSets</Filter>
     </Text>
   </ItemGroup>

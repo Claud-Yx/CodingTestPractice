@@ -1,29 +1,74 @@
-// --Coding Test Address Here--
+// https://programmers.co.kr/learn/courses/30/lessons/60060
 
 #include "core.h"
 
-#define CP_NUM "X-Y"
+#define CP_NUM "15-4"
 
-#ifdef PX_Y
+#ifdef P15_4
 #ifdef VSTOOL
 
 #include <iostream>
+#include <vector>
+#include <string>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int n{};
+	int wn{}, qn{};
+	vector<string> words{}, queries{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n;
+		is >> self.wn;
+
+		string str{};
+		for ( int i{}; i < self.wn; ++i )
+		{
+			is >> str;
+			self.words.push_back( str );
+		}
+
+		is >> self.qn;
+
+		for ( int i{}; i < self.qn; ++i )
+		{
+			is >> str;
+			self.queries.push_back( str );
+		}
 
 		return is;
 	}
 };
 
-using Result = int;
+struct Result {
+	int n{};
+	vector<int> v{};
+
+	bool operator==( const Result& other )
+	{
+		if ( n != other.n )
+			return false;
+
+		if ( v != other.v )
+			return false;
+		return true;
+	}
+
+	friend istream& operator>>( istream& is, Result& self )
+	{
+		is >> self.n;
+
+		int num{};
+		for ( int i{}; i < self.n; ++i )
+		{
+			is >> num;
+			self.v.push_back( num );
+		}
+
+		return is;
+	}
+};
 
 struct TestSet {
 	int num{};
@@ -51,7 +96,11 @@ struct std::formatter<Result> {
 
 	template <typename FormatContext>
 	auto format( const Result& ts, FormatContext& ctx ) {
-		auto out = format_to( ctx.out(), "{}", ts );
+		auto out = format_to( ctx.out(), "" );
+
+		for ( int i{}; i < ts.n; ++i )
+			out = format_to( out, "{} ", ts.v[i] );
+
 		return out;
 	}
 };
@@ -68,8 +117,19 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {}", ts.param.n );
-		out = format_to( out, "\n{:^6}| ", "" );
+		string title{"word"};
+		out = format_to( out, "\n{:^6}| ", title );
+		for ( int i{}; i < ts.param.wn; ++i )
+		{
+			out = format_to( out, "{} ", ts.param.words[i] );
+		}
+
+		title = "query";
+		out = format_to( out, "\n{:^6}| ", title );
+		for ( int i{}; i < ts.param.qn; ++i )
+		{
+			out = format_to( out, "{} ", ts.param.queries[i] );
+		}
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
@@ -86,7 +146,7 @@ int main()
 {
 	cout << "Practice " << CP_NUM << " =======================" << endl;
 
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/"+ string( CP_NUM ) + ".txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/" + string( CP_NUM ) + ".txt" ) };
 
 	cout << "My Solution =========================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {

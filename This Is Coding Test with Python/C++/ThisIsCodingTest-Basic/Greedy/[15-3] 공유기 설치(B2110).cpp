@@ -1,23 +1,32 @@
-// --Coding Test Address Here--
+// https://www.acmicpc.net/problem/2110
 
 #include "core.h"
 
-#define CP_NUM "X-Y"
+#define CP_NUM "15-3"
 
-#ifdef PX_Y
+#ifdef P15_3
 #ifdef VSTOOL
 
 #include <iostream>
+#include <vector>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int n{};
+	int N{}, C{};
+	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n;
+		is >> self.N >> self.C;
+
+		int num{};
+		for ( int i{}; i < self.N; ++i )
+		{
+			is >> num;
+			self.v.push_back( num );
+		}
 
 		return is;
 	}
@@ -68,7 +77,12 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {}", ts.param.n );
+		out = format_to( out, "N: {} | C: {}", ts.param.N, ts.param.C );
+		out = format_to( out, "\n{:^6}| ", "" );
+		for ( int i{}; i < ts.param.N; ++i )
+		{
+			out = format_to( out, "{} ", ts.param.v[i] );
+		}
 		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
@@ -86,7 +100,7 @@ int main()
 {
 	cout << "Practice " << CP_NUM << " =======================" << endl;
 
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/"+ string( CP_NUM ) + ".txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/" + string( CP_NUM ) + ".txt" ) };
 
 	cout << "My Solution =========================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {

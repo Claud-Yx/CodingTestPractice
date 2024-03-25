@@ -262,6 +262,10 @@
     <ClCompile Include="[14-2] 안테나%28B18310%29.cpp" />
     <ClCompile Include="[14-3] 실패율(PC30L42889).cpp" />
     <ClCompile Include="[14-4] 카드 정렬하기(B1715).cpp" />
+    <ClCompile Include="[15-1] 정렬된 배열에서 특정 수의 개수 구하기.cpp" />
+    <ClCompile Include="[15-2] 고정점 찾기.cpp" />
+    <ClCompile Include="[15-3] 공유기 설치%28B2110%29.cpp" />
+    <ClCompile Include="[15-4] 가사 검색%28PC30L60060%29.cpp" />
     <ClCompile Include="[3-1] 거스름돈.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -447,6 +451,10 @@
     <Text Include="..\..\..\TestSets\14-1.txt" />
     <Text Include="..\..\..\TestSets\14-2.txt" />
     <Text Include="..\..\..\TestSets\14-3.txt" />
+    <Text Include="..\..\..\TestSets\15-1.txt" />
+    <Text Include="..\..\..\TestSets\15-2.txt" />
+    <Text Include="..\..\..\TestSets\15-3.txt" />
+    <Text Include="..\..\..\TestSets\15-4.txt" />
     <Text Include="..\..\..\TestSets\3-1.txt" />
     <Text Include="..\..\..\TestSets\3-2.txt" />
     <Text Include="..\..\..\TestSets\3-3.txt" />

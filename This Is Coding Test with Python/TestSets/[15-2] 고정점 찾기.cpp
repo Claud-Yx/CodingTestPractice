@@ -2,9 +2,9 @@
 
 #include "core.h"
 
-#define CP_NUM "X-Y"
+#define CP_NUM "15-2"
 
-#ifdef PX_Y
+#ifdef P15_2
 #ifdef VSTOOL
 
 #include <iostream>
@@ -12,7 +12,8 @@
 
 using namespace std;
 
-struct Param {
+struct Param
+{
 	int n{};
 
 	friend istream& operator>>( istream& is, Param& self )
@@ -25,13 +26,15 @@ struct Param {
 
 using Result = int;
 
-struct TestSet {
+struct TestSet
+{
 	int num{};
 	Param param{};
 	Result result{};
 
 	TestSet() = default;
-	TestSet( Param p, Result r ) {
+	TestSet( Param p, Result r )
+	{
 		param = p;
 		result = r;
 	}
@@ -46,22 +49,26 @@ struct TestSet {
 
 // Only Result Formmater
 template <>
-struct std::formatter<Result> {
+struct std::formatter<Result>
+{
 	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
 
 	template <typename FormatContext>
-	auto format( const Result& ts, FormatContext& ctx ) {
+	auto format( const Result& ts, FormatContext& ctx )
+	{
 		auto out = format_to( ctx.out(), "{}", ts );
 		return out;
 	}
 };
 
 template <>
-struct std::formatter<TestSet> {
+struct std::formatter<TestSet>
+{
 	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
 
 	template <typename FormatContext>
-	auto format( const TestSet& ts, FormatContext& ctx ) {
+	auto format( const TestSet& ts, FormatContext& ctx )
+	{
 
 		// Example Number Line
 		string strnum = "[" + to_string( ts.num ) + "]";
@@ -86,10 +93,11 @@ int main()
 {
 	cout << "Practice " << CP_NUM << " =======================" << endl;
 
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/"+ string( CP_NUM ) + ".txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/" + string( CP_NUM ) + ".txt" ) };
 
 	cout << "My Solution =========================\n";
-	for ( int i{}; const auto & test_set : test_sets ) {
+	for ( int i{}; const auto & test_set : test_sets )
+	{
 		OutputTestSolution<Param, Result, TestSet>( MySolution, ++i, test_set.param, test_set.result );
 		cout << endl;
 	}
@@ -102,7 +110,7 @@ int main()
 }
 
 /*
- í’€ì´
+ Ç®ÀÌ
 */
 
 

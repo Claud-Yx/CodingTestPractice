@@ -1,23 +1,47 @@
-// --Coding Test Address Here--
+// ============================================================================================
+// 문제)
+// N개의 원소를 포함하고 있는 수열이 오름차순으로 정렬되어 있습니다. 이때 이 수열에서 x가 등장
+// 하는 횟수를 계산하세요. 예를 들어 수열 {1, 1, 2, 2, 2, 2, 3}이 있을 때 x = 2라면, 현재 수열에서
+// 값이 2인 원소가 4개이므로 4를 출력합니다.
+// 
+// 단, 이 문제는 시간 복잡도 O(logN)으로 알고리즘을 설계하지 않으면 '시간 초과' 판정을 받습니다.
+// 
+// 입력 조건: 첫째 줄에 N과 x가 정수 형태로 공백으로 구분되어 입력됩니다.
+//           (1 <= N <= 1,000,000), (-10^9 <= x <= 10^9)
+//			 둘째 줄에 N개의 원소가 정수 형태로 공백으로 구분되어 입력됩니다.
+//			 (-10^9 <= 각 원소의 값 <= 10^9)
+// 
+// 출력 조건: 수열의 원소 중ㅇ서 값이 x인 원소의 개수를 출력합니다. 단, 값이 x인 원소가 하나도 없다면
+//           -1을 출력합니다.
+//=============================================================================================
 
 #include "core.h"
 
-#define CP_NUM "X-Y"
+#define CP_NUM "15-1"
 
-#ifdef PX_Y
+#ifdef P15_1
 #ifdef VSTOOL
 
 #include <iostream>
+#include <vector>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int n{};
+	int N{}, x{};
+	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n;
+		is >> self.N >> self.x;
+
+		int num{};
+		for ( int i{}; i < self.N; ++i ) 
+		{
+			is >> num;
+			self.v.push_back( num );
+		}
 
 		return is;
 	}
@@ -44,18 +68,6 @@ struct TestSet {
 	}
 };
 
-// Only Result Formmater
-template <>
-struct std::formatter<Result> {
-	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
-
-	template <typename FormatContext>
-	auto format( const Result& ts, FormatContext& ctx ) {
-		auto out = format_to( ctx.out(), "{}", ts );
-		return out;
-	}
-};
-
 template <>
 struct std::formatter<TestSet> {
 	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
@@ -68,7 +80,12 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {}", ts.param.n );
+		out = format_to( out, "N: {} | x: {}", ts.param.N, ts.param.x );
+		out = format_to( out, "\n{:^6}| ", "" );
+		for ( int i{}; i < ts.param.N; ++i )
+		{
+			out = format_to( out, "{} ", ts.param.v[i] );
+		}
 		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
@@ -86,7 +103,7 @@ int main()
 {
 	cout << "Practice " << CP_NUM << " =======================" << endl;
 
-	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/"+ string( CP_NUM ) + ".txt" ) };
+	auto test_sets{ ReadTestFile<TestSet>( "../../../TestSets/" + string( CP_NUM ) + ".txt" ) };
 
 	cout << "My Solution =========================\n";
 	for ( int i{}; const auto & test_set : test_sets ) {
