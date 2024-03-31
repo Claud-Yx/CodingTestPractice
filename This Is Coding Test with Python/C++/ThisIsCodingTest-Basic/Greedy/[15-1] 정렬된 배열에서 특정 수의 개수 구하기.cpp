@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
@@ -122,10 +123,21 @@ int main()
  풀이
 */
 
-
 Result MySolution( Param param )
 {
 	Result result{};
+
+	int N{ param.N }, x{ param.x };
+	vector<int> v{ param.v };
+
+	auto first = lower_bound( v.begin(), v.end(), x );
+	auto last = upper_bound( v.begin(), v.end(), x );
+
+	result = distance( first, last );
+
+	if ( result == 0 )
+		result = -1;
+
 	return result;
 }
 
