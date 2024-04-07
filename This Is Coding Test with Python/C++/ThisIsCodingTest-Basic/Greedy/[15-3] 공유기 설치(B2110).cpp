@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
@@ -117,12 +118,64 @@ int main()
 
 /*
  풀이
+ 아마도 최소/최대값의 중앙값과 가장 유사한 값을 공유기 위치로 지정하는게 맞는 것 같다.
+
+ 다음은 예시 배열이다.
+ 
+ 1. 이진 탐색을 사용하기 위해 정렬해야 한다.
+ 
+	[1 3 5 9 10]									|	[1 2 3 4 5 6 39 61 81]
+
+ 2. 공유기를 총 4개로 가정했을 때, 4개의 지점을 골라야 한다.
+    여기서 항상 2개의 지점은 처음(min)과 끝(max)으로 지정한다.
+ 
+	[1 3 5 9 10]									|	[1 2 3 4 5 6 39 61 81]
+	 ^       ^										|	 ^				   ^
+
+ 3. 중앙값( min + (max-min) / 2 )을 구한다.
+
+	median = 1 + ( 10 - 1 ) / 2 = 5.5				| median = 1 + ( 81 - 1 ) / 2 = 41
+
+ 4. 이진탐색을 진행하여 median와 가장 유사한 위치를 구한다. 그 위치가 다음 공유기의 위치가 된다.
+ 
+	median: 5.5										|	median: 41
+	[1 3 5 9 10]									|	[1 2 3 4 5 6 39 61 81]
+	 ^   ^   ^										|	 ^           ^     ^	
+
+ 5. 왼쪽과 오른쪽을 mid를 포함한 두 배열로 나누어 동일하게 진행한다.
+    동일하게 진행하되, 둘 중 각 중간값이 중앙값에 더 가까운 쪽을 고른다.
+
+			left    right							|			left				right
+			[1 3 5] [5 9 10]						|			[1 2 3 4 5 6 39]	[39 61 81]
+	median   3	     7.5							|	median	 20					 60
+	        [1 3 5] [5 9 10]						|			[1 2 3 4 5 6 39]	[39 61 81]
+			   ^									|									^
+
+ 6. 결과
+
+	[1 3 5 9 10]									|	[1 2 3 4 5 6 39 61 81]
+	 ^ ^ ^   ^										|	 ^           ^  ^  ^	
+	답: 2										    |	답: 20
 */
 
+double GetMedian( int min, int max )
+{
+	return min + double( ( max - min ) / 2.0 );
+}
 
 Result MySolution( Param param )
 {
 	Result result{};
+
+	int N{ param.N }, C{ param.C };
+	auto v{ param.v };
+
+	int min{ v.front() }, max{ v.back() }; // min과 max를 처음과 끝으로 지정한다.
+	int wifi = C - 2;	// 동시에 공유기(대충 와이파이) 수를 2 줄인다.(2개를 배치했다는 의미)
+	int min_distance = max - min;		// 최소 거리
+
+	float median = 
+
 	return result;
 }
 
