@@ -3,6 +3,7 @@
 #include "core.h"
 
 #define CP_NUM "15-4"
+#define CASE 2
 
 #ifdef P15_4
 #ifdef VSTOOL
@@ -10,6 +11,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <regex>
+#include <map>
 #include "CodingTester.h"
 
 using namespace std;
@@ -163,14 +166,115 @@ int main()
 
 /*
  풀이
+ 일단 이 문제는 regex를 사용하면 매우 쉽게 풀 수 있을 것 같아서 시도해본다. (Case 1)
+ -> 효율성 문제 5 중 3 가 실패!
+
+ 이진 탐색을 이용하자. (Case 2)
+
+ - 이진 탐색은 정렬된 단어 사이에서 query를 통해 수행 ([frodo front frost...] 사이에서 fro?? 로) -> upper/lower bound 사용
+ - 단어의 길이로 다시 한 번 구분해야 함 -> unordered_map 사용
+ - '?'는 각각 'a'와 'z'로 치환하여 탐색할 수 있도록 함
+   
+   예) 3글자 단어들 [abc, cde, fgh, bbc, fag] 중 'f??'로 질의한다면?
+	   1. 단어들을 정렬 -> [abc, bbc, cde, fag, fgh]
+       2. 'faa'와 'fzz' 로 경계 생성
+	   3. 그 사이의 단어 수 == 검색 결과 수 -> faa <= [fag, fgh] <= fzz, 2개
 */
 
 
+#if (CASE == 1)
 Result MySolution( Param param )
 {
 	Result result{};
+
+	// Input
+	auto words = param.words;
+	auto queries = param.queries;
+
+	for ( auto& query : queries )
+	{
+		string re_str = regex_replace( query, regex( R"(\?)" ), "." );
+		regex re( re_str );
+
+		int amount{};
+		for ( const auto& word : words )
+		{
+			if ( regex_match( word, re ) )
+				++amount;
+		}
+
+		result.v.push_back( amount );
+	}
+	
+	result.n = result.v.size();
 	return result;
 }
+
+#elif (CASE == 2)
+
+unordered_map<int, vector<string>> GenerateWordsByLength(const vector<string>& words)
+{
+	unordered_map<int, vector<string>> m{};
+
+	for ( const auto& word : words )
+	{
+		m[word.size()].push_back( word );
+	}
+
+	for ( auto& v : m )
+	{
+		sort( v.second.begin(), v.second.end() );
+	}
+
+	return m;
+}
+
+// 이진 탐색을 사용해 패턴에 맞는 단어 수를 계산
+int CountMatches( const vector<string>& sorted_words, const string& query ) {
+	string lower = query, upper = query;
+	replace( lower.begin(), lower.end(), '?', 'a');  // '?'를 'a'로 치환
+	replace( upper.begin(), upper.end(), '?', 'z');  // '?'를 'z'로 치환
+
+	auto lower_bound_ = lower_bound( sorted_words.begin(), sorted_words.end(), lower );
+	auto upper_bound_ = upper_bound( sorted_words.begin(), sorted_words.end(), upper );
+
+	return distance( lower_bound_, upper_bound_ );
+}
+
+Result MySolution( Param param )
+{
+	Result answer{};
+
+	// Input
+	auto words = param.words;
+	auto queries = param.queries;
+
+	// 뒤집힌 단어 리스트 (odorf)
+	vector<string> reversed_words = words;
+	for ( string& word : reversed_words ) {
+		reverse( word.begin(), word.end() );
+	}
+
+	auto words_by_length = GenerateWordsByLength(words);
+	auto reversed_words_by_length = GenerateWordsByLength(reversed_words);
+
+	for ( const string& query : queries ) {
+		if ( query[0] == '?' ) {
+			// 접두사 '?' 처리: 단어를 뒤집어서 검색
+			string reversed_query = query;
+			reverse( reversed_query.begin(), reversed_query.end() ); // ????o -> o????
+			answer.v.push_back( CountMatches( reversed_words_by_length[query.size()], reversed_query));
+		}
+		else {
+			// 접미사 '?' 처리: 정방향으로 검색
+			answer.v.push_back( CountMatches( words_by_length[query.size()], query));
+		}
+	}
+
+	answer.n = answer.v.size();
+	return answer;
+}
+#endif
 
 Result BookSolution( Param param )
 {

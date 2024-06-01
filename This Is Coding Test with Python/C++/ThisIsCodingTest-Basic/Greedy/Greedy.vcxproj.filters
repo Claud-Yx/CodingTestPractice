@@ -211,6 +211,12 @@
     <ClCompile Include="[15-4] 가사 검색%28PC30L60060%29.cpp">
       <Filter>소스 파일\7. BinarySearch</Filter>
     </ClCompile>
+    <ClCompile Include="[16-1] 31. 금광.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
+    <ClCompile Include="[16-2] 32. 정수 삼각형%28B1932%29.cpp">
+      <Filter>소스 파일\8. DynamicProgramming</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodingTester.h">
@@ -393,6 +399,12 @@
       <Filter>소스 파일\1. TestSets</Filter>
     </Text>
     <Text Include="..\..\..\TestSets\15-4.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\16-1.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\16-2.txt">
       <Filter>소스 파일\1. TestSets</Filter>
     </Text>
   </ItemGroup>
