@@ -165,20 +165,20 @@ int main()
 }
 
 /*
- 풀이
- 일단 이 문제는 regex를 사용하면 매우 쉽게 풀 수 있을 것 같아서 시도해본다. (Case 1)
- -> 효율성 문제 5 중 3 가 실패!
+ ???
+ ?쇰떒 ??臾몄젣??regex瑜??ъ슜?섎㈃ 留ㅼ슦 ?쎄쾶 ? ???덉쓣 寃?媛숈븘???쒕룄?대낯?? (Case 1)
+ -> ?⑥쑉??臾몄젣 5 以?3 媛 ?ㅽ뙣!
 
- 이진 탐색을 이용하자. (Case 2)
+ ?댁쭊 ?먯깋???댁슜?섏옄. (Case 2)
 
- - 이진 탐색은 정렬된 단어 사이에서 query를 통해 수행 ([frodo front frost...] 사이에서 fro?? 로) -> upper/lower bound 사용
- - 단어의 길이로 다시 한 번 구분해야 함 -> unordered_map 사용
- - '?'는 각각 'a'와 'z'로 치환하여 탐색할 수 있도록 함
+ - ?댁쭊 ?먯깋? ?뺣젹???⑥뼱 ?ъ씠?먯꽌 query瑜??듯빐 ?섑뻾 ([frodo front frost...] ?ъ씠?먯꽌 fro?? 濡? -> upper/lower bound ?ъ슜
+ - ?⑥뼱??湲몄씠濡??ㅼ떆 ??踰?援щ텇?댁빞 ??-> unordered_map ?ъ슜
+ - '?'??媛곴컖 'a'? 'z'濡?移섑솚?섏뿬 ?먯깋?????덈룄濡???
    
-   예) 3글자 단어들 [abc, cde, fgh, bbc, fag] 중 'f??'로 질의한다면?
-	   1. 단어들을 정렬 -> [abc, bbc, cde, fag, fgh]
-       2. 'faa'와 'fzz' 로 경계 생성
-	   3. 그 사이의 단어 수 == 검색 결과 수 -> faa <= [fag, fgh] <= fzz, 2개
+   ?? 3湲???⑥뼱??[abc, cde, fgh, bbc, fag] 以?'f??'濡?吏덉쓽?쒕떎硫?
+	   1. ?⑥뼱?ㅼ쓣 ?뺣젹 -> [abc, bbc, cde, fag, fgh]
+       2. 'faa'? 'fzz' 濡?寃쎄퀎 ?앹꽦
+	   3. 洹??ъ씠???⑥뼱 ??== 寃??寃곌낵 ??-> faa <= [fag, fgh] <= fzz, 2媛?
 */
 
 
@@ -229,11 +229,11 @@ unordered_map<int, vector<string>> GenerateWordsByLength(const vector<string>& w
 	return m;
 }
 
-// 이진 탐색을 사용해 패턴에 맞는 단어 수를 계산
+// ?댁쭊 ?먯깋???ъ슜???⑦꽩??留욌뒗 ?⑥뼱 ?섎? 怨꾩궛
 int CountMatches( const vector<string>& sorted_words, const string& query ) {
 	string lower = query, upper = query;
-	replace( lower.begin(), lower.end(), '?', 'a');  // '?'를 'a'로 치환
-	replace( upper.begin(), upper.end(), '?', 'z');  // '?'를 'z'로 치환
+	replace( lower.begin(), lower.end(), '?', 'a');  // '?'瑜?'a'濡?移섑솚
+	replace( upper.begin(), upper.end(), '?', 'z');  // '?'瑜?'z'濡?移섑솚
 
 	auto lower_bound_ = lower_bound( sorted_words.begin(), sorted_words.end(), lower );
 	auto upper_bound_ = upper_bound( sorted_words.begin(), sorted_words.end(), upper );
@@ -249,7 +249,7 @@ Result MySolution( Param param )
 	auto words = param.words;
 	auto queries = param.queries;
 
-	// 뒤집힌 단어 리스트 (odorf)
+	// ?ㅼ쭛???⑥뼱 由ъ뒪??(odorf)
 	vector<string> reversed_words = words;
 	for ( string& word : reversed_words ) {
 		reverse( word.begin(), word.end() );
@@ -260,13 +260,13 @@ Result MySolution( Param param )
 
 	for ( const string& query : queries ) {
 		if ( query[0] == '?' ) {
-			// 접두사 '?' 처리: 단어를 뒤집어서 검색
+			// ?묐몢??'?' 泥섎━: ?⑥뼱瑜??ㅼ쭛?댁꽌 寃??
 			string reversed_query = query;
 			reverse( reversed_query.begin(), reversed_query.end() ); // ????o -> o????
 			answer.v.push_back( CountMatches( reversed_words_by_length[query.size()], reversed_query));
 		}
 		else {
-			// 접미사 '?' 처리: 정방향으로 검색
+			// ?묐???'?' 泥섎━: ?뺣갑?μ쑝濡?寃??
 			answer.v.push_back( CountMatches( words_by_length[query.size()], query));
 		}
 	}

@@ -273,7 +273,7 @@
     <ClCompile Include="[16-5] 35. 못생긴 수.cpp" />
     <ClCompile Include="[16-6] 36. 편집 거리.cpp" />
     <ClCompile Include="[17-1] 37. 플로이드(B11404).cpp" />
-    <ClCompile Include="[17-2] 38. 정확한 순위.cpp" />
+    <ClCompile Include="[17-2] 38.정확한 순위.cpp" />
     <ClCompile Include="[3-1] 거스름돈.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
