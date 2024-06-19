@@ -1,47 +1,30 @@
-// ============================================================================================
-// ë¬¸ì œ)
-// Nê°œì˜ ?ì†Œë¥??¬í•¨?˜ê³  ?ˆëŠ” ?˜ì—´???¤ë¦„ì°¨ìˆœ?¼ë¡œ ?•ë ¬?˜ì–´ ?ˆìŠµ?ˆë‹¤. ?´ë•Œ ???˜ì—´?ì„œ xê°€ ?±ì¥
-// ?˜ëŠ” ?Ÿìˆ˜ë¥?ê³„ì‚°?˜ì„¸?? ?ˆë? ?¤ì–´ ?˜ì—´ {1, 1, 2, 2, 2, 2, 3}???ˆì„ ??x = 2?¼ë©´, ?„ì¬ ?˜ì—´?ì„œ
-// ê°’ì´ 2???ì†Œê°€ 4ê°œì´ë¯€ë¡?4ë¥?ì¶œë ¥?©ë‹ˆ??
-// 
-// ?? ??ë¬¸ì œ???œê°„ ë³µì¡??O(logN)?¼ë¡œ ?Œê³ ë¦¬ì¦˜???¤ê³„?˜ì? ?Šìœ¼ë©?'?œê°„ ì´ˆê³¼' ?ì •??ë°›ìŠµ?ˆë‹¤.
-// 
-// ?…ë ¥ ì¡°ê±´: ì²«ì§¸ ì¤„ì— Nê³?xê°€ ?•ìˆ˜ ?•íƒœë¡?ê³µë°±?¼ë¡œ êµ¬ë¶„?˜ì–´ ?…ë ¥?©ë‹ˆ??
-//           (1 <= N <= 1,000,000), (-10^9 <= x <= 10^9)
-//			 ?˜ì§¸ ì¤„ì— Nê°œì˜ ?ì†Œê°€ ?•ìˆ˜ ?•íƒœë¡?ê³µë°±?¼ë¡œ êµ¬ë¶„?˜ì–´ ?…ë ¥?©ë‹ˆ??
-//			 (-10^9 <= ê°??ì†Œ??ê°?<= 10^9)
-// 
-// ì¶œë ¥ ì¡°ê±´: ?˜ì—´???ì†Œ ì¤‘ã…‡??ê°’ì´ x???ì†Œ??ê°œìˆ˜ë¥?ì¶œë ¥?©ë‹ˆ?? ?? ê°’ì´ x???ì†Œê°€ ?˜ë‚˜???†ë‹¤ë©?
-//           -1??ì¶œë ¥?©ë‹ˆ??
-//=============================================================================================
+// --Coding Test Address Here--
 
 #include "core.h"
 
-#define CP_NUM "15-1"
+#define CP_NUM "16-4"
 
-#ifdef P15_1
+#ifdef P16_4
 #ifdef VSTOOL
 
 #include <iostream>
-#include <vector>
-#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int N{}, x{};
+	int n{};
 	vector<int> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.N >> self.x;
+		is >> self.n;
 
-		int num{};
-		for ( int i{}; i < self.N; ++i ) 
+		int tmp{};
+		for ( int i{}; i < self.n; ++i )
 		{
-			is >> num;
-			self.v.push_back( num );
+			is >> tmp;
+			self.v.push_back( tmp );
 		}
 
 		return is;
@@ -60,6 +43,7 @@ struct TestSet {
 		param = p;
 		result = r;
 	}
+
 	friend istream& operator>>( istream& is, TestSet& t )
 	{
 		is >> t.param;
@@ -81,13 +65,13 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "N: {} | x: {}", ts.param.N, ts.param.x );
+		out = format_to( out, "n: {}", ts.param.n );
 		out = format_to( out, "\n{:^6}| ", "" );
-		for ( int i{}; i < ts.param.N; ++i )
+
+		for ( int i{}; i < ts.param.n; ++i )
 		{
-			out = format_to( out, "{} ", ts.param.v[i] );
+			out = format_to( out, "{} ", ts.param.v[i]);
 		}
-		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
@@ -120,23 +104,34 @@ int main()
 }
 
 /*
- ?€??
+ ????
+ ??Œë®˜ ??????ê¾ªë‹¾?Î¼????¾§???í€? ????????ê¾ªë‹¾?Î¼???????ºè¹‚?€???ë¯¨êµ…??åª›ìˆ‡?ï§???ä»???ï§ë‚†????¢ì¡????•ë–.
+
 */
+
 
 Result MySolution( Param param )
 {
 	Result result{};
 
-	int N{ param.N }, x{ param.x };
-	vector<int> v{ param.v };
+	int pop = param.n;
+	auto forces = param.v;
 
-	auto first = lower_bound( v.begin(), v.end(), x );
-	auto last = upper_bound( v.begin(), v.end(), x );
+	vector<int> dt( pop, 1 );
+	reverse( forces.begin(), forces.end() );
 
-	result = distance( first, last );
+	for ( int i{ 1 }; i < pop; ++i )
+	{
+		for ( int j{}; j < i; ++j )
+		{
+			if ( forces[j] < forces[i] ) // ????????ê¾ªë‹¾?Î¼??åª›ìˆ†êµ?????ï§?
+			{
+				dt[i] = max( dt[i], dt[j] - 1 );
+			}
+		}
+	}
 
-	if ( result == 0 )
-		result = -1;
+	result = pop - *max_element( dt.begin(), dt.end() );
 
 	return result;
 }

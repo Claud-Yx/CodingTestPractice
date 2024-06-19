@@ -1,0 +1,15 @@
+sunday
+saturday
+3
+
+cat
+cut
+1
+
+abcdefg
+aebcdfg
+2
+
+abcdefg
+aecdefgb
+2

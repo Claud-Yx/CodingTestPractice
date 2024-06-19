@@ -161,11 +161,11 @@ int main()
 }
 
 /*
- 풀이
- 1. 국어 내림차순
- 2. 영어 오름차순
- 3. 수학 내림차순
- 4. 이름 사전순(오름차순)
+ ?�??
+ 1. �?�� ?�림차순
+ 2. ?�어 ?�름차순
+ 3. ?�학 ?�림차순
+ 4. ?�름 ?�전???�름차순)
 */
 
 struct StudentScore {
@@ -185,12 +185,12 @@ Result MySolution( Param param )
 		bool operator()( const StudentScore& lhs, const StudentScore& rhs ) const
 		{
 			if ( lhs.kor != rhs.kor )
-				return lhs.kor > rhs.kor; // 국어 점수가 높은 학생이 앞에 오도록
+				return lhs.kor > rhs.kor; // �?�� ?�수가 ?��? ?�생???�에 ?�도�?
 			if ( lhs.eng != rhs.eng )
-				return lhs.eng < rhs.eng; // 영어 점수가 낮은 학생이 앞에 오도록
+				return lhs.eng < rhs.eng; // ?�어 ?�수가 ??? ?�생???�에 ?�도�?
 			if ( lhs.math != rhs.math )
-				return lhs.math > rhs.math; // 수학 점수가 높은 학생이 앞에 오도록
-			return lhs.name < rhs.name; // 이름이 사전 순으로 앞선 학생이 앞에 오도록
+				return lhs.math > rhs.math; // ?�학 ?�수가 ?��? ?�생???�에 ?�도�?
+			return lhs.name < rhs.name; // ?�름???�전 ?�으�??�선 ?�생???�에 ?�도�?
 		}
 	};
 

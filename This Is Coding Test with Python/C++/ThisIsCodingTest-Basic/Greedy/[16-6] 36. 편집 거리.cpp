@@ -2,9 +2,9 @@
 
 #include "core.h"
 
-#define CP_NUM "16-4"
+#define CP_NUM "16-6"
 
-#ifdef P16_4
+#ifdef P16_6
 #ifdef VSTOOL
 
 #include <iostream>
@@ -13,19 +13,11 @@
 using namespace std;
 
 struct Param {
-	int n{};
-	vector<int> v{};
+	string A{}, B{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n;
-
-		int tmp{};
-		for ( int i{}; i < self.n; ++i )
-		{
-			is >> tmp;
-			self.v.push_back( tmp );
-		}
+		is >> self.A >> self.B;
 
 		return is;
 	}
@@ -43,7 +35,6 @@ struct TestSet {
 		param = p;
 		result = r;
 	}
-
 	friend istream& operator>>( istream& is, TestSet& t )
 	{
 		is >> t.param;
@@ -65,13 +56,9 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {}", ts.param.n );
+		out = format_to( out, "A: {}", ts.param.A );
 		out = format_to( out, "\n{:^6}| ", "" );
-
-		for ( int i{}; i < ts.param.n; ++i )
-		{
-			out = format_to( out, "{} ", ts.param.v[i]);
-		}
+		out = format_to( out, "B: {}", ts.param.B );
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
@@ -104,38 +91,59 @@ int main()
 }
 
 /*
- 풀이
- 앞뒤 사람의 전투력을 비교하고, 뒷 사람의 전투력이 앞 사람보다 높거나 같다면 둘 중 한 명이 빠져야 한다.
-
+ ???
 */
 
+#undef max
+#undef min
 
 Result MySolution( Param param )
 {
 	Result result{};
 
-	int pop = param.n;
-	auto forces = param.v;
+	string A = param.A, B = param.B;
+	vector<vector<int>> dp{};
 
-	vector<int> dt( pop, 1 );
-	reverse( forces.begin(), forces.end() );
-
-	for ( int i{ 1 }; i < pop; ++i )
+	for ( int i{}; i <= A.size(); ++i )
 	{
-		for ( int j{}; j < i; ++j )
+		dp.push_back( {} );
+
+		for ( int j{}; j <= B.size(); ++j )
 		{
-			if ( forces[j] < forces[i] ) // 뒷 사람의 전투력이 같거나 크다면
+			if ( i == 0 )
 			{
-				dt[i] = max( dt[i], dt[j] - 1 );
+				dp.back().push_back( j );
+			}
+			else if ( j > 0 )
+			{
+				dp.back().push_back( numeric_limits<int>::max() );
+			}
+			else
+			{
+				dp.back().push_back( i );
+			} 
+		}
+	}
+
+	for ( int i{}; i < A.size(); ++i )
+	{
+		for ( int j{}; j < B.size(); ++j )
+		{
+			if ( A[i] == B[j] )	// 같은 위치의 단어가 같으면 넘어감
+			{
+				dp[i + 1][j + 1] = dp[i][j];
+			}
+			else
+			{
+				dp[i + 1][j + 1] = 1 + min( min(dp[i + 1][j], dp[i][j + 1]), dp[i][j] );
 			}
 		}
 	}
 
-	result = pop - *max_element( dt.begin(), dt.end() );
+	result = dp[A.size()][B.size()];
 
 	return result;
 }
-
 Result BookSolution( Param param )
 {
 	Result result{};

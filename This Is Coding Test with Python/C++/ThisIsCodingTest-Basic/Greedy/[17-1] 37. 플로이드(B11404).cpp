@@ -1,54 +1,38 @@
-// ============================================================================================
-// ë¬¸ì œ)
-// Nê°œì˜ ?ì†Œë¥??¬í•¨?˜ê³  ?ˆëŠ” ?˜ì—´???¤ë¦„ì°¨ìˆœ?¼ë¡œ ?•ë ¬?˜ì–´ ?ˆìŠµ?ˆë‹¤. ?´ë•Œ ???˜ì—´?ì„œ xê°€ ?±ì¥
-// ?˜ëŠ” ?Ÿìˆ˜ë¥?ê³„ì‚°?˜ì„¸?? ?ˆë? ?¤ì–´ ?˜ì—´ {1, 1, 2, 2, 2, 2, 3}???ˆì„ ??x = 2?¼ë©´, ?„ì¬ ?˜ì—´?ì„œ
-// ê°’ì´ 2???ì†Œê°€ 4ê°œì´ë¯€ë¡?4ë¥?ì¶œë ¥?©ë‹ˆ??
-// 
-// ?? ??ë¬¸ì œ???œê°„ ë³µì¡??O(logN)?¼ë¡œ ?Œê³ ë¦¬ì¦˜???¤ê³„?˜ì? ?Šìœ¼ë©?'?œê°„ ì´ˆê³¼' ?ì •??ë°›ìŠµ?ˆë‹¤.
-// 
-// ?…ë ¥ ì¡°ê±´: ì²«ì§¸ ì¤„ì— Nê³?xê°€ ?•ìˆ˜ ?•íƒœë¡?ê³µë°±?¼ë¡œ êµ¬ë¶„?˜ì–´ ?…ë ¥?©ë‹ˆ??
-//           (1 <= N <= 1,000,000), (-10^9 <= x <= 10^9)
-//			 ?˜ì§¸ ì¤„ì— Nê°œì˜ ?ì†Œê°€ ?•ìˆ˜ ?•íƒœë¡?ê³µë°±?¼ë¡œ êµ¬ë¶„?˜ì–´ ?…ë ¥?©ë‹ˆ??
-//			 (-10^9 <= ê°??ì†Œ??ê°?<= 10^9)
-// 
-// ì¶œë ¥ ì¡°ê±´: ?˜ì—´???ì†Œ ì¤‘ã…‡??ê°’ì´ x???ì†Œ??ê°œìˆ˜ë¥?ì¶œë ¥?©ë‹ˆ?? ?? ê°’ì´ x???ì†Œê°€ ?˜ë‚˜???†ë‹¤ë©?
-//           -1??ì¶œë ¥?©ë‹ˆ??
-//=============================================================================================
+// https://www.acmicpc.net/problem/11404
 
 #include "core.h"
 
-#define CP_NUM "15-1"
+#define CP_NUM "17-1"
 
-#ifdef P15_1
+#ifdef P17_1
 #ifdef VSTOOL
 
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <array>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int N{}, x{};
-	vector<int> v{};
+	int n{}, m{};
+	vector<array<int, 3>> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.N >> self.x;
+		is >> self.n >> self.m;
 
-		int num{};
-		for ( int i{}; i < self.N; ++i ) 
+		int tmp1{}, tmp2{}, tmp3{};
+		for ( int i{}; i < self.m; ++i )
 		{
-			is >> num;
-			self.v.push_back( num );
+			is >> tmp1 >> tmp2 >> tmp3;
+			self.v.push_back( { tmp1, tmp2, tmp3 } );
 		}
 
 		return is;
 	}
 };
 
-using Result = int;
+using Result = vector<vector<int>>;
 
 struct TestSet {
 	int num{};
@@ -63,9 +47,44 @@ struct TestSet {
 	friend istream& operator>>( istream& is, TestSet& t )
 	{
 		is >> t.param;
-		is >> t.result;
+
+		int tmp{};
+
+		for ( int i{}; i < t.param.n; ++i )
+		{
+			t.result.push_back( {} );
+			for ( int j{}; j < t.param.n; ++j )
+			{
+				is >> tmp;
+				t.result.back().push_back( tmp );
+			}
+
+
+		}
 
 		return is;
+	}
+};
+
+// Only Result Formmater
+template <>
+struct std::formatter<Result> {
+	constexpr auto parse( format_parse_context& ctx ) { return ctx.begin(); }
+
+	template <typename FormatContext>
+	auto format( const Result& ts, FormatContext& ctx ) {
+		auto out = format_to( ctx.out(), "" );
+
+		for ( int i{}; i < ts.size(); ++i )
+		{
+			out = format_to( ctx.out(), "\n{:^6}| ", "" );
+			for ( int j{}; j < ts.size(); ++j )
+			{
+				out = format_to( ctx.out(), "{:>2} ", ts[i][j] );
+			}
+		}
+
+		return out;
 	}
 };
 
@@ -81,17 +100,21 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "N: {} | x: {}", ts.param.N, ts.param.x );
+		out = format_to( out, "n: {} m: {}", ts.param.n, ts.param.m );
 		out = format_to( out, "\n{:^6}| ", "" );
-		for ( int i{}; i < ts.param.N; ++i )
+
+		for ( int i{}; i < ts.param.v.size(); ++i )
 		{
-			out = format_to( out, "{} ", ts.param.v[i] );
+			for ( int j{}; j < ts.param.v[i].size(); ++j )
+			{
+				out = format_to( out, "{:>2} ", ts.param.v[i][j] );
+			}
+			out = format_to( out, "\n{:^6}| ", "" );
 		}
-		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
-		out = format_to( out, "\n{:^6}| Result: {}", "", ts.result );
+		out = format_to( out, "\n{:^6}| Result: {}\n", "", ts.result );
 
 		return out;
 	}
@@ -120,23 +143,54 @@ int main()
 }
 
 /*
- ?€??
+ ?Â€??
 */
+
+#undef max
+#undef min
+constexpr int A{ 0 }, B{ 1 }, FARE{ 2 };
+constexpr int MAX_FARE{ 1'000'000 };
 
 Result MySolution( Param param )
 {
 	Result result{};
 
-	int N{ param.N }, x{ param.x };
-	vector<int> v{ param.v };
 
-	auto first = lower_bound( v.begin(), v.end(), x );
-	auto last = upper_bound( v.begin(), v.end(), x );
+	int n = param.n, m = param.m;
+	auto v = param.v;
 
-	result = distance( first, last );
+	for ( int i{}; i < n; ++i )
+	{
+		result.push_back( {} );
+		for ( int j{}; j < n; ++j )
+		{
+			if ( i == j )
+			{
+				result.back().push_back( 0 );
+			}
+			else
+			{
+				result.back().push_back( MAX_FARE );
+			}
+		}
+	}
 
-	if ( result == 0 )
-		result = -1;
+	for ( const auto& path : v )
+	{
+		result[path[A] - 1][path[B] - 1] = min( result[path[A] - 1][path[B] - 1], path[FARE] );
+	}
+
+
+	for ( int offset{}; offset < n; ++offset )
+	{
+		for ( int i{}; i < n; ++i )
+		{
+			for ( int j{}; j < n; ++j )
+			{
+				result[i][j] = min( result[i][j], result[i][offset] + result[offset][j] );
+			}
+		}
+	}
 
 	return result;
 }

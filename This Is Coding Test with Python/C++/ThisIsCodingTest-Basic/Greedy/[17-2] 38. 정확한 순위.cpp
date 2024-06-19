@@ -2,9 +2,9 @@
 
 #include "core.h"
 
-#define CP_NUM "16-5"
+#define CP_NUM "17-2"
 
-#ifdef P16_5
+#ifdef P17_2
 #ifdef VSTOOL
 
 #include <iostream>
@@ -12,7 +12,17 @@
 
 using namespace std;
 
-using Param = int;
+struct Param {
+	string A{}, B{};
+
+	friend istream& operator>>( istream& is, Param& self )
+	{
+		is >> self.A >> self.B;
+
+		return is;
+	}
+};
+
 using Result = int;
 
 struct TestSet {
@@ -46,8 +56,9 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {}", ts.param );
+		out = format_to( out, "A: {}", ts.param.A );
 		out = format_to( out, "\n{:^6}| ", "" );
+		out = format_to( out, "B: {}", ts.param.B );
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
@@ -80,59 +91,12 @@ int main()
 }
 
 /*
- 풀이
+ ???
 */
-
 
 Result MySolution( Param param )
 {
 	Result result{};
-
-	vector<bool> ugly_nums{ false, true };	// 0과 1의 못생긴 수 여부
-
-	int order{ 1 };
-	for ( int num{ 2 }; order < param; ++num )
-	{
-		int div = num;
-
-		if ( div % 5 == 0 )
-		{
-			div /= 5;
-		}
-		else if ( div % 3 == 0 )
-		{
-			div /= 3;
-		}
-		else if ( div % 2 == 0 )
-		{
-			div /= 2;
-		}
-		else
-		{
-			div -= div;
-		}
-
-		/*
-			2 -> loop
-
-			2 / 2 = 1
-			1 = ugly
-			== 2 = ugly
-		*/
-
-		if ( ugly_nums[div] )
-		{
-			ugly_nums.push_back( true );
-			++order;
-		}
-		else
-		{
-			ugly_nums.push_back( false );
-		}
-	}
-
-	result = ugly_nums.size() - 1;
-
 	return result;
 }
 

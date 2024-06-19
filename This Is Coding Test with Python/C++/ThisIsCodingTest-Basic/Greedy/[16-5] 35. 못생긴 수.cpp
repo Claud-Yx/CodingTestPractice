@@ -1,53 +1,18 @@
-// ============================================================================================
-// ë¬¸ì œ)
-// Nê°œì˜ ?ì†Œë¥??¬í•¨?˜ê³  ?ˆëŠ” ?˜ì—´???¤ë¦„ì°¨ìˆœ?¼ë¡œ ?•ë ¬?˜ì–´ ?ˆìŠµ?ˆë‹¤. ?´ë•Œ ???˜ì—´?ì„œ xê°€ ?±ì¥
-// ?˜ëŠ” ?Ÿìˆ˜ë¥?ê³„ì‚°?˜ì„¸?? ?ˆë? ?¤ì–´ ?˜ì—´ {1, 1, 2, 2, 2, 2, 3}???ˆì„ ??x = 2?¼ë©´, ?„ì¬ ?˜ì—´?ì„œ
-// ê°’ì´ 2???ì†Œê°€ 4ê°œì´ë¯€ë¡?4ë¥?ì¶œë ¥?©ë‹ˆ??
-// 
-// ?? ??ë¬¸ì œ???œê°„ ë³µì¡??O(logN)?¼ë¡œ ?Œê³ ë¦¬ì¦˜???¤ê³„?˜ì? ?Šìœ¼ë©?'?œê°„ ì´ˆê³¼' ?ì •??ë°›ìŠµ?ˆë‹¤.
-// 
-// ?…ë ¥ ì¡°ê±´: ì²«ì§¸ ì¤„ì— Nê³?xê°€ ?•ìˆ˜ ?•íƒœë¡?ê³µë°±?¼ë¡œ êµ¬ë¶„?˜ì–´ ?…ë ¥?©ë‹ˆ??
-//           (1 <= N <= 1,000,000), (-10^9 <= x <= 10^9)
-//			 ?˜ì§¸ ì¤„ì— Nê°œì˜ ?ì†Œê°€ ?•ìˆ˜ ?•íƒœë¡?ê³µë°±?¼ë¡œ êµ¬ë¶„?˜ì–´ ?…ë ¥?©ë‹ˆ??
-//			 (-10^9 <= ê°??ì†Œ??ê°?<= 10^9)
-// 
-// ì¶œë ¥ ì¡°ê±´: ?˜ì—´???ì†Œ ì¤‘ã…‡??ê°’ì´ x???ì†Œ??ê°œìˆ˜ë¥?ì¶œë ¥?©ë‹ˆ?? ?? ê°’ì´ x???ì†Œê°€ ?˜ë‚˜???†ë‹¤ë©?
-//           -1??ì¶œë ¥?©ë‹ˆ??
-//=============================================================================================
+// --Coding Test Address Here--
 
 #include "core.h"
 
-#define CP_NUM "15-1"
+#define CP_NUM "16-5"
 
-#ifdef P15_1
+#ifdef P16_5
 #ifdef VSTOOL
 
 #include <iostream>
-#include <vector>
-#include <algorithm>
 #include "CodingTester.h"
 
 using namespace std;
 
-struct Param {
-	int N{}, x{};
-	vector<int> v{};
-
-	friend istream& operator>>( istream& is, Param& self )
-	{
-		is >> self.N >> self.x;
-
-		int num{};
-		for ( int i{}; i < self.N; ++i ) 
-		{
-			is >> num;
-			self.v.push_back( num );
-		}
-
-		return is;
-	}
-};
-
+using Param = int;
 using Result = int;
 
 struct TestSet {
@@ -81,12 +46,7 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "N: {} | x: {}", ts.param.N, ts.param.x );
-		out = format_to( out, "\n{:^6}| ", "" );
-		for ( int i{}; i < ts.param.N; ++i )
-		{
-			out = format_to( out, "{} ", ts.param.v[i] );
-		}
+		out = format_to( out, "n: {}", ts.param );
 		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
@@ -120,23 +80,58 @@ int main()
 }
 
 /*
- ?€??
+ ?Â€??
 */
+
 
 Result MySolution( Param param )
 {
 	Result result{};
 
-	int N{ param.N }, x{ param.x };
-	vector<int> v{ param.v };
+	vector<bool> ugly_nums{ false, true };	// 0æ€¨?1??ï§ì‚´ê¹®æ¹²????Ñ‰?
 
-	auto first = lower_bound( v.begin(), v.end(), x );
-	auto last = upper_bound( v.begin(), v.end(), x );
+	int order{ 1 };
+	for ( int num{ 2 }; order < param; ++num )
+	{
+		int div = num;
 
-	result = distance( first, last );
+		if ( div % 5 == 0 )
+		{
+			div /= 5;
+		}
+		else if ( div % 3 == 0 )
+		{
+			div /= 3;
+		}
+		else if ( div % 2 == 0 )
+		{
+			div /= 2;
+		}
+		else
+		{
+			div -= div;
+		}
 
-	if ( result == 0 )
-		result = -1;
+		/*
+			2 -> loop
+
+			2 / 2 = 1
+			1 = ugly
+			== 2 = ugly
+		*/
+
+		if ( ugly_nums[div] )
+		{
+			ugly_nums.push_back( true );
+			++order;
+		}
+		else
+		{
+			ugly_nums.push_back( false );
+		}
+	}
+
+	result = ugly_nums.size() - 1;
 
 	return result;
 }
