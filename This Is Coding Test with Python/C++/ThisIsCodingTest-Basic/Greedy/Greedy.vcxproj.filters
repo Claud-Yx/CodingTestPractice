@@ -232,7 +232,13 @@
     <ClCompile Include="[17-1] 37. 플로이드(B11404).cpp">
       <Filter>소스 파일\9. Shortest Path</Filter>
     </ClCompile>
-    <ClCompile Include="[17-2] 38. 정확한 순위.cpp">
+    <ClCompile Include="[17-2] 38.정확한 순위.cpp">
+      <Filter>소스 파일\9. Shortest Path</Filter>
+    </ClCompile>
+    <ClCompile Include="[17-3] 39.화성 탐사.cpp">
+      <Filter>소스 파일\9. Shortest Path</Filter>
+    </ClCompile>
+    <ClCompile Include="[17-4] 40.숨바꼭질.cpp">
       <Filter>소스 파일\9. Shortest Path</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,9 +251,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="CodeForm.cpp">
-      <Filter>소스 파일</Filter>
-    </Text>
     <Text Include="..\..\..\TestSets\3-1.txt">
       <Filter>소스 파일\1. TestSets</Filter>
     </Text>
@@ -435,5 +438,11 @@
       <Filter>소스 파일\1. TestSets</Filter>
     </Text>
     <Text Include="..\..\..\TestSets\17-2.txt" />
+    <Text Include="CodeForm.cpp">
+      <Filter>소스 파일</Filter>
+    </Text>
+    <Text Include="..\..\..\TestSets\17-3.txt">
+      <Filter>소스 파일\1. TestSets</Filter>
+    </Text>
   </ItemGroup>
 </Project>

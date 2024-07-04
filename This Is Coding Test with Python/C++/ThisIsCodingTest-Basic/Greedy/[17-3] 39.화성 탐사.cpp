@@ -1,33 +1,36 @@
-// --Coding Test Address Here--
+﻿// --Coding Test Address Here--
 
 #include "core.h"
 
-#define CP_NUM "17-2"
+#define CP_NUM "17-3"
 
-#ifdef P17_2
+#ifdef P17_3
 #ifdef VSTOOL
 
 #include <iostream>
-#include <vector>
-#include <array>
 #include "CodingTester.h"
 
 using namespace std;
 
 struct Param {
-	int n{}, m{};
-	vector<array<int, 2>> v{};
+	int n{};
+	vector<vector<int>> v{};
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
-		is >> self.n >> self.m;
+		is >> self.n;
 
-		int tmp1{}, tmp2{};
+		int tmp{};
 
-		for ( int i{}; i < self.m; ++i )
+		for ( int i{}; i < self.n; ++i )
 		{
-			is >> tmp1 >> tmp2;
-			self.v.push_back( {tmp1, tmp2} );
+			self.v.push_back( {} );
+			for ( int j{}; j < self.n; ++j )
+			{
+				is >> tmp;
+
+				self.v.back().push_back( tmp );
+			}
 		}
 
 		return is;
@@ -79,13 +82,17 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {} | m: {}", ts.param.n, ts.param.m );
-		out = format_to( out, "\n{:^6}| ", "" );
+		out = format_to( out, "n: {}", ts.param.n );
 
-		for ( int i{}; i < ts.param.m; ++i )
+		for ( int i{}; i < ts.param.n; ++i )
 		{
-			out = format_to( out, "\n{:^6}| {} -> {}", "", ts.param.v[i][0], ts.param.v[i][1]);
+			out = format_to( out, "\n{:^6}| ", "" );
+			for ( int j{}; j < ts.param.n; ++j )
+			{
+				out = format_to( out, "{} ", ts.param.v[i][j] );
+			}
 		}
+
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
@@ -121,72 +128,92 @@ int main()
  ????
 */
 
+#include <queue>
+#include <array>
 #undef max
+
+struct Spot {
+	int x{}, y{};
+	int cost{};
+	Spot* prev{};
+
+	bool operator<( const Spot& other ) const
+	{
+		return cost > other.cost;
+	}
+
+	bool operator==( const Spot& other ) const
+	{
+		return ( y == other.y && x == other.x );
+	}
+};
+
+bool IsValidSpot( const Spot& spot, const Spot& prev_dir, int n )
+{
+	if ( spot.y == prev_dir.y && spot.x == prev_dir.x ) return false;
+	else if ( spot.y < 0 ) return false;
+	else if ( spot.y >= n ) return false;
+	else if ( spot.x < 0 ) return false;
+	else if ( spot.x >= n ) return false;
+	return true;
+}
 
 Result MySolution( Param param )
 {
 	Result result{};
 
-	vector<vector<int>> dt{};
+	int n = param.n;
+	vector<vector<int>> v = param.v;
+	vector<vector<int>> dt = v;
 
-	int n = param.n, m = param.m;
-	auto v = param.v;
-
-	for ( int i{}; i < m; ++i )
+	for ( auto& y : dt )
 	{
-		dt.push_back( {} );
-		for ( int j{}; j < m; ++j )
+		for ( auto& x : y )
 		{
-			if ( i == j )
-				dt.back().push_back( 0 );
-			else
-				dt.back().push_back( n );
+			x = numeric_limits<int>::max();	// data table 理쒕?媛믪쑝濡?珥덇린??
 		}
 	}
 
-	for ( const auto& elm : v )
-	{
-		dt[elm[0] - 1][elm[1] - 1] = 1;
-	}
+	priority_queue<Spot> q{};
+	q.emplace( 0, 0, v[0][0], new Spot{-1, -1, -1, nullptr});
 
-	// ???��??��????��濡??꾩븘????�깮 ??李얘�?
-	for ( int k{}; k < n; ++k )
+	while ( !q.empty() )
 	{
-		for ( int i{}; i < n; ++i )
+		auto spot = q.top();
+		auto& dt_elm = dt[spot.y][spot.x];
+		q.pop();
+
+		dt_elm = min<int>( spot.cost, dt_elm );
+
+		// ?ㅼ쓬 ??諛⑺뼢
+		Spot dirs[]{
+			{ spot.x, spot.y - 1, 0, new Spot{spot} },
+			{ spot.x + 1, spot.y, 0, new Spot{spot} },
+			{ spot.x, spot.y + 1, 0, new Spot{spot} },
+			{ spot.x - 1, spot.y, 0, new Spot{spot} }
+		};
+
+		for ( auto& dir : dirs )
 		{
-			for ( int j{}; j < n; ++j )
+			if ( IsValidSpot( dir, *spot.prev, n ) )
 			{
-				dt[i][j] = min<int>( { dt[i][j], dt[i][k] + dt[k][j] } );
+				dir.cost = v[dir.y][dir.x] + spot.cost;	// ?ㅼ쓬 媛??μ냼???뚮え?됯낵 ?꾩옱源뚯????꾩쟻 ?뚮え?됱쓣 ?뷀븿
+
+				if ( dt[dir.y][dir.x] > dir.cost )	// ?ㅼ쓬 媛??μ냼???덉쓣 ?뚮え?됰낫???묐떎硫?
+				{
+					q.emplace( dir );				// queue???깅줉
+				}
+			}
+			else
+			{
+				delete dir.prev;
 			}
 		}
+
+		delete spot.prev;
 	}
 
-	for ( int i{}; i < n; ++i )
-	{
-		int cnt{};	// ?�?��??湲곗???�줈 ??�쐞????????�뒗 ??�깮 ??
-
-		for ( int j{}; j < n; ++j )
-		{
-			if ( dt[i][j] < n || dt[j][i] < n )	// ?꾨떖 媛????�떎�?
-				cnt += 1;
-		}
-
-		if ( cnt == n )		// ??�깮??? ???꾩븘????�깮 ??? 媛숇?�硫?
-			result += 1;	// 寃곌????�붽?
-	}
-
-	/*
-	   1   2   3   4   5   6
-	1  0               1	 
-	2      0 	  -1 	 
-	3          0   1 	 	 
-	4      1  -1   0	 	 
-	5 -1               0	 
-	6                      0
-	
-	*/
-
-
+	result = dt[n - 1][n - 1];
 
 	return result;
 }

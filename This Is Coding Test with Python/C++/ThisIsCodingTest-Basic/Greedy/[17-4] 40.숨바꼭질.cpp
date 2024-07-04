@@ -2,13 +2,12 @@
 
 #include "core.h"
 
-#define CP_NUM "17-2"
+#define CP_NUM "17-4"
 
-#ifdef P17_2
+#ifdef P17_4
 #ifdef VSTOOL
 
 #include <iostream>
-#include <vector>
 #include <array>
 #include "CodingTester.h"
 
@@ -16,25 +15,31 @@ using namespace std;
 
 struct Param {
 	int n{}, m{};
-	vector<array<int, 2>> v{};
+	vector<pair<int, int>> v;
 
 	friend istream& operator>>( istream& is, Param& self )
 	{
 		is >> self.n >> self.m;
 
-		int tmp1{}, tmp2{};
-
 		for ( int i{}; i < self.m; ++i )
 		{
+			int tmp1{}, tmp2{};
 			is >> tmp1 >> tmp2;
-			self.v.push_back( {tmp1, tmp2} );
+			self.v.emplace_back( tmp1, tmp2 );
 		}
 
 		return is;
 	}
 };
 
-using Result = int;
+using Result = array<int, 3>;
+
+istream& operator>>( istream& is, Result& self )
+{
+	is >> self[0] >> self[1] >> self[2];
+
+	return is;
+}
 
 struct TestSet {
 	int num{};
@@ -62,7 +67,7 @@ struct std::formatter<Result> {
 
 	template <typename FormatContext>
 	auto format( const Result& ts, FormatContext& ctx ) {
-		auto out = format_to( ctx.out(), "{}", ts );
+		auto out = format_to( ctx.out(), "{} {} {}", ts[0], ts[1], ts[2] );
 		return out;
 	}
 };
@@ -79,13 +84,14 @@ struct std::formatter<TestSet> {
 		auto out = format_to( ctx.out(), "{:^6}| ", strnum );
 
 		// Parameter Line
-		out = format_to( out, "n: {} | m: {}", ts.param.n, ts.param.m );
-		out = format_to( out, "\n{:^6}| ", "" );
-
+		out = format_to( out, "n: {} m: {}", ts.param.n, ts.param.m );
+		
 		for ( int i{}; i < ts.param.m; ++i )
 		{
-			out = format_to( out, "\n{:^6}| {} -> {}", "", ts.param.v[i][0], ts.param.v[i][1]);
+			out = format_to( out, "{} {}", ts.param.v[i].first, ts.param.v[i].second );
 		}
+
+		out = format_to( out, "\n{:^6}| ", "" );
 
 		// Result Line
 		out = format_to( out, "\n{:^6}| ", "" );
@@ -121,73 +127,10 @@ int main()
  ????
 */
 
-#undef max
 
 Result MySolution( Param param )
 {
 	Result result{};
-
-	vector<vector<int>> dt{};
-
-	int n = param.n, m = param.m;
-	auto v = param.v;
-
-	for ( int i{}; i < m; ++i )
-	{
-		dt.push_back( {} );
-		for ( int j{}; j < m; ++j )
-		{
-			if ( i == j )
-				dt.back().push_back( 0 );
-			else
-				dt.back().push_back( n );
-		}
-	}
-
-	for ( const auto& elm : v )
-	{
-		dt[elm[0] - 1][elm[1] - 1] = 1;
-	}
-
-	// ???¤ˆ??€ë±????€¥æ¿¡??ê¾©ë¸˜????ˆê¹® ??ï§¡ì–˜ë¦?
-	for ( int k{}; k < n; ++k )
-	{
-		for ( int i{}; i < n; ++i )
-		{
-			for ( int j{}; j < n; ++j )
-			{
-				dt[i][j] = min<int>( { dt[i][j], dt[i][k] + dt[k][j] } );
-			}
-		}
-	}
-
-	for ( int i{}; i < n; ++i )
-	{
-		int cnt{};	// ?ë¨?–Š??æ¹²ê³—???°ì¤ˆ ??–ìž????????ˆë’— ??ˆê¹® ??
-
-		for ( int j{}; j < n; ++j )
-		{
-			if ( dt[i][j] < n || dt[j][i] < n )	// ?ê¾¨ë–– åª›Â€????Žë–Žï§?
-				cnt += 1;
-		}
-
-		if ( cnt == n )		// ??ˆê¹®??? ???ê¾©ë¸˜????ˆê¹® ??? åª›ìˆ‡?Žï§Ž?
-			result += 1;	// å¯ƒê³Œ????°ë¶½?
-	}
-
-	/*
-	   1   2   3   4   5   6
-	1  0               1	 
-	2      0 	  -1 	 
-	3          0   1 	 	 
-	4      1  -1   0	 	 
-	5 -1               0	 
-	6                      0
-	
-	*/
-
-
-
 	return result;
 }
 

@@ -91,7 +91,7 @@ int main()
 }
 
 /*
- ???
+ ????
 */
 
 #undef max
@@ -129,7 +129,7 @@ Result MySolution( Param param )
 	{
 		for ( int j{}; j < B.size(); ++j )
 		{
-			if ( A[i] == B[j] )	// 같은 위치의 단어가 같으면 넘어감
+			if ( A[i] == B[j] )	// 같�? ?�치???�어가 같으�??�어�?
 			{
 				dp[i + 1][j + 1] = dp[i][j];
 			}
